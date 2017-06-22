@@ -18,22 +18,25 @@
       <div class="right_content">
         <div class="right_content_inner">
           <%- partial('partial/filter') %>
+          <%- partial('partial/comment') %>
+          <%- partial('partial/folder') %>
+          <%- partial('partial/user') %>
         </div>
       </div>
-      <ul class="menu">
-        <li class="active">
+      <ul class="menu J_menu">
+        <li class="menu-filter active" data-menu="filter">
           <i class="fa fa-sliders"></i>
           <span>筛选列表</span>
         </li>
-        <li>
+        <li class="menu-comment" data-menu="comment">
           <i class="fa fa-comments"></i>
           <span>文章评论</span>
         </li>
-        <li>
+        <li class="menu-folder" data-menu="folder">
           <i class="fa fa-folder"></i>
           <span>分类标签</span>
         </li>
-        <li>
+        <li class="menu-user" data-menu="user">
           <i class="fa fa-user"></i>
           <span>个人中心</span>
         </li>
