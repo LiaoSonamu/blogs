@@ -1,7 +1,9 @@
 @import '_partial/variable';
 @import '_partial/scroll';
 @import '_partial/awesome';
-
+.iScrollIndicator {
+  border: none !important;
+}
 * {
   box-sizing: border-box;
 }
@@ -41,6 +43,7 @@ a {
 
 .box {
   display: none;
+  padding: 30px 10px 0;
   &.active {
     display: block;
   }
@@ -148,6 +151,7 @@ input {
 }
 
 .left {
+  position: relative;
   height: 100%;
   float: left;
   width: 70%;
@@ -392,23 +396,23 @@ article {
   position: relative;
   height: 100%;
   width: 30%;
-  background: @bg-box;
+  display: flex;
+  flex-direction: column;
   .right_content {
-    height: 100%;
-    padding: 12px;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    padding-right: 10px;
     .right_content_inner {
-      height: 100%;
-      padding-bottom: 55px;
+      background: @bg-box;
     }
   }
   .menu {
-    position: absolute;
-    bottom: 0;
     width: 100%;
     height: 55px;
     line-height: 55px;
     text-align: center;
-    background: rgb(20, 20, 20);
+    background: rgb(36, 36, 36);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     font-size: 20px;
     display: flex;

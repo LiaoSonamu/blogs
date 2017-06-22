@@ -23,7 +23,7 @@ app.use(express.static(path.join(__dirname, `public`)));
 app.use(partial());
 
 
-app.use((req, res, next) =>{
+app.use('*', (req, res, next) =>{
   res.locals.$static = config.static;
   next();
 });
@@ -31,18 +31,19 @@ app.use((req, res, next) =>{
 // 路由配置
 require(`./routes/indexRouter`)(app);
 
-app.use((req, res, next) => {
-  var err = new Error(`Not Found`);
-  err.status = 404;
-  next(err);
-});
+// app.use((req, res, next) => {
+//   var err = new Error(`Not Found`);
+//   err.status = 404;
+//   next(err);
+// });
 
 app.use((err, req, res, next) => {
   res.locals.message = err.message;
   res.locals.error = req.app.get(`env`) === `development` ? err : {};
 
   res.status(err.status || 500);
-  res.render(`error`);
+  // res.render(`error`);
+  console.log(err);
 });
 
 // 创建MongoDB连接

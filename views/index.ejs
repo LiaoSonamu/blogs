@@ -7,10 +7,12 @@
 </head>
 <body>
   
-  <div class="wrap">
+  <div class="wrap" id="vue-box">
     <div class="left">
 
-      <%- partial('partial/article', {article: article}) %>
+      <div class="left-scroll">
+        <%- partial('partial/article', {article: article}) %>
+      </div>
 
     </div>
 
