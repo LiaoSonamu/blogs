@@ -1,5 +1,8 @@
 const 
   gulp = require(`gulp`),
+  babelify = require(`babelify`),
+  browserify = require(`browserify`),
+  through2 = require(`through2`),
   $ = require(`gulp-load-plugins`)();
 
 let isDev = !gulp.env.p;
@@ -15,11 +18,24 @@ gulp.task(`styles`, () => gulp
   .pipe(gulp.dest(`public`))
 );
 
+gulp.task(`scripts`, () => gulp
+  .src([`source/scripts/**/*.js`, `!source/scripts/_*/*.js`])
+  .pipe($.plumber())
+  .pipe($.if(isDev, $.sourcemaps.init()))
+  .pipe(through2.obj((file, enc, next) => browserify(file.path)
+    .transform(babelify, {presets: [`es2015`]})
+    .bundle((err, res) => next(null, Object.assign(file, {contents: res})))
+  ))
+  .pipe($.uglify())
+  .pipe($.if(isDev, $.sourcemaps.write(`.`)))
+  .pipe(gulp.dest(`public`))
+);
 
 
 
 gulp.task(`watch`, () => {
   gulp.watch(`source/styles/**/*.less`, [`styles`]);
+  gulp.watch(`source/scripts/**/*.js`, [`scripts`]);
 });
 
 
