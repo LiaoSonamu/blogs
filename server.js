@@ -22,6 +22,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, `public`)));
 app.use(partial());
 
+
+app.use((req, res, next) =>{
+  res.locals.$static = config.static;
+  next();
+});
+
 // 路由配置
 require(`./routes/indexRouter`)(app);
 

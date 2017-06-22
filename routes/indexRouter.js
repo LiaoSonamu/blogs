@@ -8,10 +8,10 @@ const
 
 module.exports = app => {
   router.get('/', function(req, res, next) {
-    userModel.find((err, re) => console.log(err, re));
-    // fs.readFile(`test.md`, `utf8`, (e, d) => {
-    //   res.send(md.render(d));
-    // });
+    // userModel.find((err, re) => console.log(err, re));
+    fs.readFile(`test.md`, `utf8`, (e, d) => {
+      res.render(`index`, {article: md.render(d)});
+    });
     // res.render(`index`);
   });
 

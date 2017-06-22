@@ -15,7 +15,7 @@ gulp.task(`styles`, () => gulp
   .pipe($.autoprefixer({browsers:[`> 1%`, `last 2 versions`, `Firefox ESR`]}))
   .pipe($.cssnano())
   .pipe($.if(isDev, $.sourcemaps.write(`.`)))
-  .pipe(gulp.dest(`public`))
+  .pipe(gulp.dest(`public/styles`))
 );
 
 gulp.task(`scripts`, () => gulp
@@ -28,10 +28,13 @@ gulp.task(`scripts`, () => gulp
   ))
   .pipe($.uglify())
   .pipe($.if(isDev, $.sourcemaps.write(`.`)))
-  .pipe(gulp.dest(`public`))
+  .pipe(gulp.dest(`public/scripts`))
 );
 
-
+gulp.task(`plugins`, () => gulp
+  .src(`source/plugins/**/*`)
+  .pipe(gulp.dest(`public/plugins`))
+);
 
 gulp.task(`watch`, () => {
   gulp.watch(`source/styles/**/*.less`, [`styles`]);
@@ -39,6 +42,6 @@ gulp.task(`watch`, () => {
 });
 
 
-gulp.task(`default`, [`styles`], () => {
+gulp.task(`default`, [`styles`, `scripts`, `plugins`], () => {
   isDev && gulp.run(`watch`);
 });
