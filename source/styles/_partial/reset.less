@@ -2,7 +2,7 @@
   box-sizing: border-box;
 }
 .iScrollLoneScrollbar {
-  right: 2px !important;
+  right: 3px !important;
 }
 .iScrollIndicator {
   border: none !important;
@@ -21,13 +21,23 @@ body {
   color: @ft-color-main;
 }
 
-body, h1, h2, h3, h4, h5, h6, p, ul, ol, li blockquote {
+body, h1, h2, h3, h4, h5, h6, p, ul, ol, li, hr, blockquote, pre {
   margin: 0;
   padding: 0;
 }
 
 li {
   list-style: none;
+}
+
+input {
+  outline: none;
+  color: inherit;
+  background: transparent;
+  border: none;
+  padding: 10px;
+  padding-top: 12px;
+  line-height: 1px;
 }
 
 a {

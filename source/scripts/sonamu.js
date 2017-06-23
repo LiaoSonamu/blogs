@@ -1,6 +1,7 @@
 const scrollOption = {
   mouseWheel: true,
   scrollbars: true,
+  // fadeScrollbars: true,
   bounce: false,
   interactiveScrollbars: true
 };
@@ -13,6 +14,6 @@ new Vue({
   mounted() {
     new IScroll('.layout_left', scrollOption);
 
-    new IScroll('.layout_right', scrollOption);
+    new IScroll('.right-filter', scrollOption);
   }
 })

@@ -20,12 +20,14 @@
     </div>
 
     <div class="layout_right">
-      <div class="scroll_right">
+            
+      <%- partial('partial/filter', {article: article}) %>
 
-      </div>
     </div>
 
   </div>
+
+   <%- partial('partial/nav') %>
 
   <script src="<%= $static.css %>plugins/iscroll.js"></script>
   <script src="<%= $static.css %>plugins/vue.min.js"></script>
