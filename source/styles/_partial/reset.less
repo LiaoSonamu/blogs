@@ -1,0 +1,45 @@
+* {
+  box-sizing: border-box;
+}
+.iScrollLoneScrollbar {
+  right: 2px !important;
+}
+.iScrollIndicator {
+  border: none !important;
+  background: rgba(0, 0, 0, 0.3) !important;
+}
+html, body  {
+  width: 100%;
+  height: 100%;
+  background: @bg-main;
+  overflow: hidden;
+}
+
+body {
+  font-family: "Microsoft Yahei";
+  font-size: 14px;
+  color: @ft-color-main;
+}
+
+body, h1, h2, h3, h4, h5, h6, p, ul, ol, li blockquote {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+  &.text {
+    cursor: default;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}

@@ -31,35 +31,34 @@ app.use('*', (req, res, next) =>{
 // 路由配置
 require(`./routes/indexRouter`)(app);
 
-// app.use((req, res, next) => {
-//   var err = new Error(`Not Found`);
-//   err.status = 404;
-//   next(err);
-// });
+app.use((req, res, next) => {
+  var err = new Error(`Not Found`);
+  err.status = 404;
+  next(err);
+});
 
 app.use((err, req, res, next) => {
   res.locals.message = err.message;
   res.locals.error = req.app.get(`env`) === `development` ? err : {};
 
   res.status(err.status || 500);
-  // res.render(`error`);
   console.log(err);
 });
 
 // 创建MongoDB连接
-// mongoose
-//   .connect(config.mongoUrl)
-//   .connection
-//   .on(`connected`, () => {
-//     console.log(`Mongodb连接成功！`);
+mongoose
+  .connect(config.mongoUrl)
+  .connection
+  .on(`connected`, () => {
+    console.log(`Mongodb连接成功！`);
     // 创建HTTP连接
     (http
       .createServer(app)
       .listen(config.httpPort))
       .on('error', error => {throw error})
       .on('listening', () => console.log(`HTTP服务创建成功，监听端口：${config.httpPort}`));
-  // })
-  // .on(`error`, err => console.log(`Mongodb连接失败：${err}`))
-  // .on(`disconnected`, () => console.log(`Mongodb断开连接！`));
+  })
+  .on(`error`, err => console.log(`Mongodb连接失败：${err}`))
+  .on(`disconnected`, () => console.log(`Mongodb断开连接！`));
 
    
