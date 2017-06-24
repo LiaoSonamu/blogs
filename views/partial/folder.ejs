@@ -2,7 +2,7 @@
   <div class="scroll_right_inner">
 
     <template v-if="folderData.state === 1">
-      <p class="box-label"><span>文章分类</span></p>
+      <p class="box-label"><span>栏目类别</span></p>
       <ul class="box-list box-list-category" v-for="column in folderData.categories">
         <li class="box-list-title" :data-columnid="column.column._id">{{ column.column.name }}:</li>
         <li :data-categoryid="category._id" v-for="category in column.categories">{{ category.name }}</li>

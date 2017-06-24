@@ -1,0 +1,35 @@
+<div class="scroll_right right-has-title right-user" :class="{active: showBox === 'user'}">
+  <div class="scroll_right_inner">
+  
+  <template v-if="userData.state === 0">
+    <%- partial('partial/loading') %>
+  </template>
+  <template v-else-if="userData.state === 1">
+    <!--未登录状态-->
+    <template v-if="!userData.userinfo">
+      <div class="login-register-box">
+        <div class="l-r-head" onselectstart="return false;">
+          <span :class="{active: userData.loginOrRegister === 'login'}" @click="userData.loginOrRegister = 'login'">登录</span>
+          <span :class="{active: userData.loginOrRegister === 'register'}" @click="userData.loginOrRegister = 'register'">注册</span>
+        </div>
+        <div class="login-box" :class="{active: userData.loginOrRegister === 'login'}">
+          
+        </div>
+        <div class="register-box" :class="{active: userData.loginOrRegister === 'register'}">
+
+        </div>
+      </div>
+    </template>
+    <template v-else>
+      2
+    </template>
+  </template>
+
+  <div class="scroll_title">
+    <div class="scroll_title_inner">
+      <i class="fa fa-user"></i>
+      <span>登录注册</span>
+      <i class="fa fa-close" @click="showFilterBox"></i>
+    </div>
+  </div>
+</div>

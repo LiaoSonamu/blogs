@@ -33,9 +33,13 @@ const vueData = {
   },
   folderData: {
     state: 0,
-    message: '',
     tags: [], // 标签列表
     categories: [], // 分类列表
+  },
+  userData: {
+    state: 0,
+    loginOrRegister: 'login', // 登录login/注册register (登录状态不考虑该字段)
+    userinfo: null
   }
 };
 
@@ -56,6 +60,12 @@ const folderDataLoad = () => {
     });
 }
 
+// 加载用户信息
+const userDataLoad = () => {
+  vueData.userData.state = 1;
+  // TODO 加载真实数据  设置userinfo
+}
+
 $vm = new Vue({
   el: '#app',
   data: vueData,
@@ -69,6 +79,10 @@ $vm = new Vue({
     },
     showFilterBox() {
       this.showBox = 'filter';
+    },
+    showUserBox() {
+      this.showBox = 'user';
+      if(this.userData.state !== 1) userDataLoad();
     }
   }
 });
