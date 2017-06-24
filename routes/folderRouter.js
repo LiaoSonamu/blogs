@@ -10,7 +10,6 @@ module.exports = app =>{
   // 获取所有分类、列表
   router.get(`/lists`, (req, res) => {
     let result = {};
-
     TagModel.findAll().then(tags => {
       result.tags = tags;
       return ColumnModel.findAll();

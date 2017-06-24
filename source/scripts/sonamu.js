@@ -7,6 +7,11 @@ const scrollOption = {
   interactiveScrollbars: true
 };
 
+const headers = {
+  'Accept': 'application/json', 
+  'Content-Type': 'application/json'
+};
+
 const scrollObj = {filter: null, folder: null};
 
 const vueData = {
@@ -38,7 +43,32 @@ const vueData = {
   },
   userData: {
     state: 0,
-    loginOrRegister: 'login', // 登录login/注册register (登录状态不考虑该字段)
+    login: {
+      username: '',
+      checkUsername: true,
+      password: '',
+      checkPassword: true,
+    },
+    register: {
+      codeTime: 0,
+      username: '',
+      checkUsername: true,
+      password: '',
+      checkPassword: true,
+      email: '',
+      checkEmail: true,
+      code: '',
+      checkCode: true
+    },
+    reset: {
+      codeTime: 0,
+      email: '',
+      checkEmail: true,
+      password: '',
+      checkPassword: true,
+      code: '',
+      checkCode: true
+    },
     userinfo: null
   }
 };
@@ -64,7 +94,93 @@ const folderDataLoad = () => {
 const userDataLoad = () => {
   vueData.userData.state = 1;
   // TODO 加载真实数据  设置userinfo
+  $vm.$nextTick(() => new IScroll('.right-user', scrollOption));
 }
+
+/*********************************methods start************************************ */
+
+// 打开某个right
+const showRightBox = {
+  showFolderBox() {
+    this.showBox = 'folder';
+    if(this.folderData.state !== 1) folderDataLoad();
+  },
+  showFilterBox() {
+    this.showBox = 'filter';
+  },
+  showUserBox() {
+    this.showBox = 'user';
+    if(this.userData.state !== 1) userDataLoad();
+  }
+}
+
+// 表单验证 method
+const validate = {
+  email: /^\w+@\w+\.\w+$/,
+  username: /^\w{3,16}$/,
+  password: /^\w{6,16}$/,
+  code: /^[a-z]{6}$/i
+}
+
+const validateFns = {
+  // 登录验证
+  validateLoginUsername() {
+    return this.userData.login.checkUsername = validate.username.test(this.userData.login.username);
+  },
+  validateLoginPassword() {
+    return this.userData.login.checkPassword = validate.password.test(this.userData.login.password);
+  },
+  // 注册相关验证
+  validateRegisterEmail() {
+    return this.userData.register.checkEmail = validate.email.test(this.userData.register.email);
+  },
+  validateRegisterUsername() {
+    return this.userData.register.checkUsername = validate.username.test(this.userData.register.username);
+  },
+  validateRegisterPassword() {
+    return this.userData.register.checkPassword = validate.password.test(this.userData.register.password);
+  },
+  validateRegisterCode() {
+    return this.userData.register.checkCode = validate.code.test(this.userData.register.code);
+  },
+  // 重置密码相关
+  validateResetEmail() {
+    return this.userData.reset.checkEmail = validate.email.test(this.userData.reset.email);
+  },
+  validateResetCode() {
+    return this.userData.reset.checkCode = validate.code.test(this.userData.reset.code);
+  },
+  validateResetPassword() {
+    return this.userData.reset.checkPassword = validate.password.test(this.userData.reset.password);
+  }
+}
+
+// 公共method
+const commonMethod = {
+  sendCode(type){
+    let data = {type: type};
+    if(!this.userData[type].codeTime && validateFns[`validate${type.replace(/\w/, v => v.toUpperCase())}Email`].bind(vueData)()){
+      this.userData[type].codeTime = 61;
+      data.email = vueData.userData[type].email;
+      fetch('/common/sendCode', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(data)
+      }).then(res => res.json())
+      .then(data => {
+        if(data) {
+          alert('发送验证码失败，请重试！');
+          this.userData[type].codeTime = 0;
+        } else {
+          this.userData[type].codeTime = 60;
+          let timer = setInterval(() => --this.userData[type].codeTime || clearInterval(timer), 1000);
+        }
+      });
+    }
+  }
+}
+
+/*********************************methods end************************************ */
 
 $vm = new Vue({
   el: '#app',
@@ -73,17 +189,9 @@ $vm = new Vue({
     new IScroll('.layout_left', scrollOption);
   },
   methods: {
-    showFolderBox() {
-      this.showBox = 'folder';
-      if(this.folderData.state !== 1) folderDataLoad();
-    },
-    showFilterBox() {
-      this.showBox = 'filter';
-    },
-    showUserBox() {
-      this.showBox = 'user';
-      if(this.userData.state !== 1) userDataLoad();
-    }
+    ...showRightBox,
+    ...validateFns,
+    ...commonMethod
   }
 });
 

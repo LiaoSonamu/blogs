@@ -23,7 +23,7 @@ gulp.task(`scripts`, () => gulp
   .pipe($.plumber())
   .pipe($.if(isDev, $.sourcemaps.init()))
   .pipe(through2.obj((file, enc, next) => browserify(file.path)
-    .transform(babelify, {presets: [`es2015`]})
+    .transform(babelify, {presets: [`es2015`, 'stage-0']})
     .bundle((err, res) => next(null, Object.assign(file, {contents: res})))
   ))
   .pipe($.uglify())

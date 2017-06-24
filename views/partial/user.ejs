@@ -7,23 +7,67 @@
   <template v-else-if="userData.state === 1">
     <!--未登录状态-->
     <template v-if="!userData.userinfo">
-      <div class="login-register-box">
-        <div class="l-r-head" onselectstart="return false;">
-          <span :class="{active: userData.loginOrRegister === 'login'}" @click="userData.loginOrRegister = 'login'">登录</span>
-          <span :class="{active: userData.loginOrRegister === 'register'}" @click="userData.loginOrRegister = 'register'">注册</span>
-        </div>
-        <div class="login-box" :class="{active: userData.loginOrRegister === 'login'}">
-          
-        </div>
-        <div class="register-box" :class="{active: userData.loginOrRegister === 'register'}">
+      <p class="box-label"><span>登录</span></p>
+      <div class="input-box" :class="{error: !userData.login.checkUsername}">
+        <i class="fa fa-user"></i>
+        <input type="text" autocomplete="off" placeholder="用户名 (3-16位字母数字下划线)" v-model="userData.login.username" @blur="validateLoginUsername">
+      </div>
+      <div class="input-box" :class="{error: !userData.login.checkPassword}">
+        <i class="fa fa-lock"></i>
+        <input type="password" autocomplete="off" placeholder="密   码 (6-16位字母数字下划线)" v-model="userData.login.password" @blur="validateLoginPassword">
+      </div>
+      <div class="input-box btn">
+        <button>登 录</button>
+      </div>
 
-        </div>
+      <div class="bottom-line"></div>
+      <p class="box-label"><span>注册</span></p>
+      <div class="input-box" :class="{error: !userData.register.checkUsername}">
+        <i class="fa fa-user"></i>
+        <input type="text" autocomplete="off" placeholder="用户名 (3-16位字母数字下划线)" v-model="userData.register.username" @blur="validateRegisterUsername">
+      </div>
+      <div class="input-box" :class="{error: !userData.register.checkEmail}">
+        <i class="fa fa-envelope"></i>
+        <input type="text" autocomplete="off" placeholder="邮  箱 (用于修改、重置密码)" v-model="userData.register.email" @blur="validateRegisterEmail">
+      </div>
+      <div class="input-box" :class="{error: !userData.register.checkCode}">
+        <i class="fa fa-check-square-o"></i>
+        <input type="text" autocomplete="off" placeholder="验证码 (6位字母，不区分大小写)" v-model="userData.register.code" @blur="validateRegisterCode">
+        <a @click="sendCode('register')" :class="{disabled: userData.register.codeTime}">{{ userData.register.codeTime === 0 ? '获取' : userData.register.codeTime <= 60 ? `${userData.register.codeTime}s` : '发送中' }}</a>
+      </div>
+      <div class="input-box" :class="{error: !userData.register.checkPassword}">
+        <i class="fa fa-lock"></i>
+        <input type="password" autocomplete="off" placeholder="密   码 (6-16位字母数字下划线)" v-model="userData.register.password" @blur="validateRegisterPassword">
+      </div>
+      <div class="input-box btn">
+        <button>注 册</button>
+      </div>
+
+      <div class="bottom-line"></div>
+      <p class="box-label"><span>修改密码</span></p>
+      <div class="input-box" :class="{error: !userData.reset.checkEmail}">
+        <i class="fa fa-envelope"></i>
+        <input type="text" autocomplete="off" placeholder="邮  箱 (注册所填邮箱)" v-model="userData.reset.email" @blur="validateResetEmail">
+      </div>
+      <div class="input-box" :class="{error: !userData.reset.checkCode}">
+        <i class="fa fa-check-square-o"></i>
+        <input type="text" autocomplete="off" placeholder="验证码 (6位字母，不区分大小写)" v-model="userData.reset.code" @blur="validateResetCode">
+        <a @click="sendCode('reset')" :class="{disabled: userData.reset.codeTime}">{{ userData.reset.codeTime === 0 ? '获取' : userData.reset.codeTime <= 60 ? `${userData.reset.codeTime}s` : '发送中' }}</a>
+      </div>
+      <div class="input-box" :class="{error: !userData.reset.checkPassword}">
+        <i class="fa fa-lock"></i>
+        <input type="password" autocomplete="off" placeholder="新密码 (6-16位字母数字下划线)" v-model="userData.reset.password" @blur="validateResetPassword">
+      </div>
+
+      <div class="input-box btn btn-red">
+        <button>修改密码</button>
       </div>
     </template>
     <template v-else>
-      2
+      开发中...
     </template>
   </template>
+  </div>
 
   <div class="scroll_title">
     <div class="scroll_title_inner">

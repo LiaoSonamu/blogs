@@ -6,13 +6,17 @@ const
     cookieParser = require(`cookie-parser`),
     bodyParser = require(`body-parser`),
     partial = require('express-partials'),
+    session = require('express-session'),
     http = require(`http`),
     mongoose = require(`mongoose`),
+    nodemailer = require(`nodemailer`),
     app = express(),
     config = require(`require-yml`)(`config.yml`);
 
 mongoose.Promise = require('bluebird');
+// console.log(config.mail)
 
+app.set('mail', nodemailer.createTransport(config.mail));
 app.set(`views`, path.join(__dirname, `views`));
 app.set(`view engine`, `ejs`);
 
@@ -20,6 +24,13 @@ app.use(logger(`dev`));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({
+  secret: 'sonamu',
+  name: 'blog',
+  cookie: {maxAge: 3600000}, // 过期时间一小时
+  resave: true,
+  saveUninitialized: false
+}));
 app.use(express.static(path.join(__dirname, `public`)));
 app.use(partial());
 
@@ -31,6 +42,7 @@ app.use('*', (req, res, next) =>{
 
 // 路由配置
 require(`./routes/indexRouter`)(app);
+require(`./routes/commonRouter`)(app);
 require(`./routes/folderRouter`)(app);
 
 app.use((err, req, res, next) => {
