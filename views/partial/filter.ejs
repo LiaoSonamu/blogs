@@ -1,10 +1,10 @@
-<div class="scroll_right right-filter">
+<div class="scroll_right right-filter" :class="{active: showBox === 'filter'}">
   <div class="scroll_right_inner">
 
     <div class="search-box">
       <i class="fa fa-search"></i>
-      <input type="text" autocomplete="off" autofocus="autofocus" placeholder="输入关键字搜索文章">
-      <span>高级筛选</span>
+      <input type="text" autocomplete="off" autofocus="autofocus" placeholder="输入关键字搜索文章" v-model="searchData.keywords">
+      <span @click="showFolderBox">标签分类</span>
     </div>
 
     <div class="bottom-line"></div>
@@ -14,11 +14,32 @@
       <b>重复选择修改升降序</b>
     </p>
 
-    <ul class="box-list box-sort">
+    <ul class="box-list">
       <!--desc-->
-      <li class="active"><i class="fa fa-sort-amount-asc"></i>最新</li>
-      <li><i class="fa fa-sort-amount-asc"></i>最热</li>
+      <li class="active"><i class="fa fa-sort-amount-asc"></i>发布日期</li>
+      <li><i class="fa fa-sort-amount-asc"></i>阅读</li>
+      <li><i class="fa fa-sort-amount-asc"></i>评论</li>
+      <li><i class="fa fa-sort-amount-asc"></i>收藏</li>
+      <li><i class="fa fa-sort-amount-asc"></i>点赞</li>
     </ul>
+
+    <div class="bottom-line"></div>
+
+    <p class="box-label">
+      <span>文章来源</span>
+    </p>
+
+    <ul class="box-list">
+      <li :class="{active: searchData.nature === 'all'}">全部</li>
+      <li :class="{active: searchData.nature === 'original'}">原创</li>
+      <li :class="{active: searchData.nature === 'translate'}">翻译</li>
+      <li :class="{active: searchData.nature === 'reprint'}">转载</li>
+      <li :class="{active: searchData.nature === 'excerpt'}">节选</li>
+    </ul>
+
+    <div class="bottom-line"></div>
+
+    
 
   </div>
 </div>

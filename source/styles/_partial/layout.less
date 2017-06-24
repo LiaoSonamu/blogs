@@ -24,13 +24,57 @@
 }
 
 .scroll_right {
+  display: none;
   height: 100%;
   padding-right: 13px;
+  &.active {
+    display: block;
+  }
+  &.right-has-title {
+    padding-top: 44px;
+  }
 }
 .scroll_right_inner {
   background: @bg-box;
   min-height: 100%;
   padding: 25px 15px 15px;
+}
+
+.scroll_title {
+  position: absolute;
+  top: 0;
+  height: 44px;
+  line-height: 44px;
+  width: 100%;
+  padding-right: 13px;
+  .scroll_title_inner {
+    height: 100%;
+    width: 100%;
+    background: rgb(40, 40, 40);
+    position: relative;
+    padding: 0 15px;
+    font-size: 15px;
+    color: #fefefe;
+    display: flex;
+    align-items: center;
+    span {
+      margin-left: 10px;
+      flex: 1;
+    }
+    .fa-close {
+      cursor: pointer;
+    }
+    &:after {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 1px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      background: hsla(0,0%,100%,.1);
+    }
+  }
 }
 
 header {
@@ -121,6 +165,21 @@ article {
   }
 }
 
+.loading-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  .loading-icon {
+    font-size: 45px;
+    text-align: center;
+  }
+  .loading-test {
+    margin-top: 20px;
+    font-size: 16px;
+  }
+}
+
 .article-header {
   display: flex;
   align-items: center;
@@ -133,6 +192,7 @@ article {
     font-size: 15px;
   }
   .nature {
+    margin-right: 10px;
     color: @nature-original;
     font-weight: normal;
     border: 1px solid @nature-original;
@@ -140,6 +200,26 @@ article {
     font-size: 12px;
     padding: 0 5px;
   }
+}
+
+.c-original {
+  color: @nature-original;
+  border-color: @nature-original;
+}
+
+.c-translate {
+  color: @nature-translate;
+  border-color: @nature-translate;
+}
+
+.c-reprint {
+  color: @nature-reprint;
+  border-color: @nature-reprint;
+}
+
+.c-excerpt {
+  color: @nature-excerpt;
+  border-color: @nature-excerpt;
 }
 
 .thmub-collection {
@@ -218,9 +298,15 @@ article {
 }
 
 .box-list {
+  display: flex;
+  flex-wrap: wrap;
+  &.box-list-category:not(:last-child) {
+    margin-bottom: 15px;
+  }
   li {
-    display: inline-block;
     background: @bg-box;
+    margin: 5px;
+    white-space: nowrap;
     padding: 2px 5px;
     &:hover {
       cursor: pointer;
@@ -233,8 +319,12 @@ article {
         transform: rotateZ(180deg);
       }
     }
+
     &.active, &:hover {
       color: @color-highlight;
+    }
+    &.box-list-title {
+      color: @color-error;
     }
   }
 }

@@ -21,13 +21,16 @@
 
     <div class="layout_right">
             
-      <%- partial('partial/filter', {article: article}) %>
+      <%- partial('partial/filter') %>
+      
+      <%- partial('partial/folder') %>
 
     </div>
 
+   <%- partial('partial/nav') %>
+
   </div>
 
-   <%- partial('partial/nav') %>
 
   <script src="<%= $static.css %>plugins/iscroll.js"></script>
   <script src="<%= $static.css %>plugins/vue.min.js"></script>

@@ -11,6 +11,8 @@ const articleSchema = new mongoose.Schema({
   read: Number, // 阅读量
   ispublish: Boolean, // 是否发布
   isdelete: Boolean, // 是否被删除
+}, {
+  versionKey: false
 });
 
-module.exports = mongoose.connection.model('article', articleSchema);
+module.exports = mongoose.connection.model('article', articleSchema, 'article');

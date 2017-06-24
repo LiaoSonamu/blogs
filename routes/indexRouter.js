@@ -3,16 +3,21 @@ const
   marked = require(`marked`),
   router = require(`express`).Router();
 
-  var userModel = require(`../models/userModel`);
-  var md = require('markdown-it')();
+  const md = require('markdown-it')();
 
 module.exports = app => {
   router.get('/', function(req, res, next) {
-    // userModel.find((err, re) => console.log(err, re));
-    fs.readFile(`test.md`, `utf8`, (e, d) => {
-      res.render(`index`, {article: md.render(d)});
-    });
-    // res.render(`index`);
+    // let getTags = tagModel.findAll().then(d => console.log(d), e => console.log(e));
+    // let getColumns = columnModel.findAll().then(d => console.log(d), e => console.log(e));
+    // var a = new categoryModel({
+    //   colunm: '594db9aef2c7b11cc4a861c2',
+    //   name: 'Javascript权威指南'
+    // }).save();
+    // Promise.all([getTags, getColumns]).then(() => {
+      fs.readFile(`test.md`, `utf8`, (e, d) => {
+        res.render(`index`, {article: md.render(d)});
+      });
+    // });
   });
 
   app.use(`/`, router);

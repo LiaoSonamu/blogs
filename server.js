@@ -8,9 +8,10 @@ const
     partial = require('express-partials'),
     http = require(`http`),
     mongoose = require(`mongoose`),
-
     app = express(),
     config = require(`require-yml`)(`config.yml`);
+
+mongoose.Promise = require('bluebird');
 
 app.set(`views`, path.join(__dirname, `views`));
 app.set(`view engine`, `ejs`);
@@ -30,12 +31,7 @@ app.use('*', (req, res, next) =>{
 
 // 路由配置
 require(`./routes/indexRouter`)(app);
-
-app.use((req, res, next) => {
-  var err = new Error(`Not Found`);
-  err.status = 404;
-  next(err);
-});
+require(`./routes/folderRouter`)(app);
 
 app.use((err, req, res, next) => {
   res.locals.message = err.message;
@@ -60,5 +56,3 @@ mongoose
   })
   .on(`error`, err => console.log(`Mongodb连接失败：${err}`))
   .on(`disconnected`, () => console.log(`Mongodb断开连接！`));
-
-   

@@ -1,0 +1,30 @@
+<div class="scroll_right right-has-title right-folder" :class="{active: showBox === 'folder'}">
+  <div class="scroll_right_inner">
+
+    <template v-if="folderData.state === 1">
+      <p class="box-label"><span>文章分类</span></p>
+      <ul class="box-list box-list-category" v-for="column in folderData.categories">
+        <li class="box-list-title" :data-columnid="column.column._id">{{ column.column.name }}:</li>
+        <li :data-categoryid="category._id" v-for="category in column.categories">{{ category.name }}</li>
+      </ul>
+      <div class="bottom-line"></div>
+      <p class="box-label"><span>标签云</span></p>
+      <ul class="box-list">
+        <li v-for="tag in folderData.tags" :data-tagid="tag._id">{{ tag.name }}</li>
+      </ul>
+    </template>
+    <template v-else-if="folderData.state === 0">
+      <%- partial('partial/loading') %>
+    </template>
+
+  </div>
+
+
+  <div class="scroll_title">
+    <div class="scroll_title_inner">
+      <i class="fa fa-book"></i>
+      <span>标签分类</span>
+      <i class="fa fa-close" @click="showFilterBox"></i>
+    </div>
+  </div>
+</div>
