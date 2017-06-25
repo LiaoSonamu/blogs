@@ -284,32 +284,11 @@ article {
   }
   a {
     cursor: pointer;
+    white-space: nowrap;
     &.disabled {
       text-decoration: none;
       opacity: 0.5;
       cursor: default;
-    }
-  }
-  &.btn {
-    border: 1px solid @color-highlight;
-    color: @color-highlight;
-    transition: all 300ms;
-    cursor: pointer;
-    button {
-      font-size: 15px;
-    }
-    &:hover {
-      background: @color-highlight;
-      color: @ft-color-main;
-    }
-    &.btn-red {
-      background: transparent;
-      border: 1px solid @color-error;
-      color: @color-error;
-      &:hover {
-        background: @color-error;
-        color: @ft-color-main;
-      }
     }
   }
   &:not(:last-child) {
@@ -319,7 +298,7 @@ article {
     width: 20px;
     text-align: center;
   }
-  input, button {
+  input {
     flex: 1;
   }
   span {
@@ -327,6 +306,25 @@ article {
     color: @color-error;
     cursor: pointer;
     white-space: nowrap;
+  }
+}
+.button-box {
+  background: @color-highlight;
+  border-radius: 5px;
+  text-align: center;
+  height: 37px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.info-box {
+  display: flex;
+  justify-content: space-between;
+  a {
+    cursor: pointer;
   }
 }
 

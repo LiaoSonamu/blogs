@@ -7,17 +7,17 @@ const scrollOption = {
   interactiveScrollbars: true
 };
 
-const headers = {
-  'Accept': 'application/json', 
-  'Content-Type': 'application/json'
+const fetchOption = {
+  headers: {
+    'Accept': 'application/json', 
+    'Content-Type': 'application/json'
+  }
 };
 
 const scrollObj = {filter: null, folder: null};
 
 const vueData = {
-
   showBox: 'filter', // filter(筛选) folder(分类标签)
-
   searchData: { // 搜索内容
     keywords: '', // 关键字
     nature: 'all', // 文章来源 all(全部) original(原创) translate(翻译) reprint(转载) excerpt(节选)
@@ -30,9 +30,6 @@ const vueData = {
       id: '' // 筛选ID (标签/分类ID)
     }
   },
-
-  // 所有页面data都有一个state属性，0未加载  1 已加载 -1 加载失败
-
   filterData: {
     articles: [], // 文章列表
   },
@@ -43,33 +40,11 @@ const vueData = {
   },
   userData: {
     state: 0,
-    login: {
-      username: '',
-      checkUsername: true,
-      password: '',
-      checkPassword: true,
-    },
-    register: {
-      codeTime: 0,
-      username: '',
-      checkUsername: true,
-      password: '',
-      checkPassword: true,
-      email: '',
-      checkEmail: true,
-      code: '',
-      checkCode: true
-    },
-    reset: {
-      codeTime: 0,
-      email: '',
-      checkEmail: true,
-      password: '',
-      checkPassword: true,
-      code: '',
-      checkCode: true
-    },
-    userinfo: null
+    userinfo: null,
+    noLoginShow: 'login', // 未登录状态显示 login / register / reset ，登录状态忽略该字段
+  },
+  registerData: {
+    state: 0, time: 0, email: '', password: '', code: '', isEmail: true, isPassword: true, isCode: true
   }
 };
 
@@ -90,13 +65,6 @@ const folderDataLoad = () => {
     });
 }
 
-// 加载用户信息
-const userDataLoad = () => {
-  vueData.userData.state = 1;
-  // TODO 加载真实数据  设置userinfo
-  $vm.$nextTick(() => new IScroll('.right-user', scrollOption));
-}
-
 /*********************************methods start************************************ */
 
 // 打开某个right
@@ -108,77 +76,79 @@ const showRightBox = {
   showFilterBox() {
     this.showBox = 'filter';
   },
+  showLoginBox() {
+    this.showBox = this.userData.noLoginShow = 'login';
+  },
+  showRegisterBox() {
+    this.showBox = this.userData.noLoginShow = 'register';
+  },
+  showResetBox() {
+    this.showBox = this.userData.noLoginShow = 'reset';
+  },
   showUserBox() {
-    this.showBox = 'user';
-    if(this.userData.state !== 1) userDataLoad();
+    if(this.userData.state === 0) this.showBox = this.userData.noLoginShow;
+    else this.showBox = 'user';
   }
 }
 
 // 表单验证 method
 const validate = {
   email: /^\w+@\w+\.\w+$/,
-  username: /^\w{3,16}$/,
+  username: /^\w{6,20}$/,
   password: /^\w{6,16}$/,
   code: /^[a-z]{6}$/i
 }
 
 const validateFns = {
-  // 登录验证
-  validateLoginUsername() {
-    return this.userData.login.checkUsername = validate.username.test(this.userData.login.username);
-  },
-  validateLoginPassword() {
-    return this.userData.login.checkPassword = validate.password.test(this.userData.login.password);
-  },
-  // 注册相关验证
-  validateRegisterEmail() {
-    return this.userData.register.checkEmail = validate.email.test(this.userData.register.email);
-  },
-  validateRegisterUsername() {
-    return this.userData.register.checkUsername = validate.username.test(this.userData.register.username);
-  },
-  validateRegisterPassword() {
-    return this.userData.register.checkPassword = validate.password.test(this.userData.register.password);
-  },
-  validateRegisterCode() {
-    return this.userData.register.checkCode = validate.code.test(this.userData.register.code);
-  },
-  // 重置密码相关
-  validateResetEmail() {
-    return this.userData.reset.checkEmail = validate.email.test(this.userData.reset.email);
-  },
-  validateResetCode() {
-    return this.userData.reset.checkCode = validate.code.test(this.userData.reset.code);
-  },
-  validateResetPassword() {
-    return this.userData.reset.checkPassword = validate.password.test(this.userData.reset.password);
-  }
+  // 注册验证
+  validateRegisterPassword() { return this.registerData.isPassword = validate.password.test(this.registerData.password) },
+  validateRegisterEmail() { return this.registerData.isEmail = validate.email.test(this.registerData.email) },
+  validateRegisterCode() { return this.registerData.isCode = validate.code.test(this.registerData.code) },
 }
 
 // 公共method
 const commonMethod = {
-  sendCode(type){
-    let data = {type: type};
-    if(!this.userData[type].codeTime && validateFns[`validate${type.replace(/\w/, v => v.toUpperCase())}Email`].bind(vueData)()){
-      this.userData[type].codeTime = 61;
-      data.email = vueData.userData[type].email;
+  sendRegisterCode(){
+    if(!this.registerData.time && this.validateRegisterEmail()) {
+      this.registerData.time = 61;
       fetch('/common/sendCode', {
+        ...fetchOption,
         method: 'POST',
-        headers,
-        body: JSON.stringify(data)
+        body: JSON.stringify({
+          type: 'register',
+          email: this.registerData.email
+        })
       }).then(res => res.json())
-      .then(data => {
-        if(data) {
-          alert('发送验证码失败，请重试！');
-          this.userData[type].codeTime = 0;
-        } else {
-          this.userData[type].codeTime = 60;
-          let timer = setInterval(() => --this.userData[type].codeTime || clearInterval(timer), 1000);
+      .then(d => {
+        if(d) {
+          alert('验证码发送失败，请重试！');
+          this.registerData.time = 0;
+        }else {
+          this.registerData.time = 60;
+          let timmer = setInterval(() => --this.registerData.time <= 0 || clearInterval(timmer), 1000);
         }
-      });
+      }, () => this.registerData.time = 0)
     }
+  },
+  // 注册
+  registerFn(){
+    // if(!this.registerData.state && this.validateRegisterEmail() && this.validateRegisterCode() && this.validateRegisterPassword()) {
+      fetch('/common/register', {
+        method: 'POST',
+        ...fetchOption,
+        body: JSON.stringify({
+          email: this.registerData.email,
+          password: this.registerData.password,
+          code: this.registerData.code
+        })
+      }).then(res => res.json())
+      .then(d => {
+        console.log(d);
+      });
+    // }
   }
 }
+
 
 /*********************************methods end************************************ */
 

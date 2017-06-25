@@ -10,30 +10,32 @@ const
     http = require(`http`),
     mongoose = require(`mongoose`),
     nodemailer = require(`nodemailer`),
+    MongoStore = require('connect-mongo')(session),
+
     app = express(),
     config = require(`require-yml`)(`config.yml`);
 
 mongoose.Promise = require('bluebird');
-// console.log(config.mail)
 
 app.set('mail', nodemailer.createTransport(config.mail));
 app.set(`views`, path.join(__dirname, `views`));
 app.set(`view engine`, `ejs`);
 
 app.use(logger(`dev`));
+// app.use(express.favicon(path.join(__dirname, `public`)));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(session({
-  secret: 'sonamu',
-  name: 'blog',
-  cookie: {maxAge: 3600000}, // 过期时间一小时
-  resave: true,
-  saveUninitialized: false
-}));
 app.use(express.static(path.join(__dirname, `public`)));
 app.use(partial());
-
+app.use(session({
+  store: new MongoStore({
+    interval: 3600000,
+    url: config.mongoUrl
+  }),
+  secret: 'sonamu',
+  cookie: {maxAge: 3600000}
+}));
 
 app.use('*', (req, res, next) =>{
   res.locals.$static = config.static;

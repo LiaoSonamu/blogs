@@ -1,0 +1,31 @@
+<div class="scroll_right right-has-title right-login" :class="{active: showBox === 'login'}">
+  <div class="scroll_right_inner">
+
+    <div class="input-box">
+      <i class="fa fa-user"></i>
+      <input type="text" autocomplete="off" placeholder="用户名 (6-20汉字字母数字下划线)">
+    </div>
+
+    <div class="input-box">
+      <i class="fa fa-lock"></i>
+      <input type="password" autocomplete="off" placeholder="密   码 (6-20位字母数字下划线)">
+    </div>
+
+    <div class="button-box">登 录</div>
+
+    <p class="info-box">
+      <a>忘记密码</a>
+      <a @click="showRegisterBox">注册新用户</a>
+    </p>
+
+  </div>
+
+
+  <div class="scroll_title">
+    <div class="scroll_title_inner">
+      <i class="fa fa-user-circle"></i>
+      <span>登 录</span>
+      <i class="fa fa-close" @click="showFilterBox"></i>
+    </div>
+  </div>
+</div>
