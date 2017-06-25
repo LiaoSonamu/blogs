@@ -22,22 +22,23 @@ app.set(`views`, path.join(__dirname, `views`));
 app.set(`view engine`, `ejs`);
 
 app.use(logger(`dev`));
-// app.use(express.favicon(path.join(__dirname, `public`)));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, `public`)));
-app.use(partial());
 app.use(session({
   store: new MongoStore({
     interval: 3600000,
     url: config.mongoUrl
   }),
-  secret: 'sonamu',
-  cookie: {maxAge: 3600000}
+  secret: 'sonamu'
 }));
+app.use(favicon(path.join(__dirname, `/favicon.jpg`)));
+app.use(express.static(path.join(__dirname, `public`)));
+app.use(partial());
 
-app.use('*', (req, res, next) =>{
+
+app.use('*', (req, res, next) => {
+  res.locals.$userinfo = req.session.userinfo;
   res.locals.$static = config.static;
   next();
 });

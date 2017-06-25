@@ -6,31 +6,54 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <link rel="stylesheet" href="<%= $static.css %>styles/sonamu.css">
+  <script>
+    var vueData = {
+      showBox: 'filter', // filter(筛选) folder(分类标签)
+      searchData: { // 搜索内容
+        keywords: '', // 关键字
+        nature: 'all', // 文章来源 all(全部) original(原创) translate(翻译) reprint(转载) excerpt(节选)
+        sort: { // 排序
+          id: 'date', // 排序ID  （date, read, comment, collection, thumb）
+          type: 'desc' // 方式 desc/asc
+        }, 
+        filter: { // 筛选
+          type: '', // 筛选类型 tag/categories
+          id: '' // 筛选ID (标签/分类ID)
+        }
+      },
+      filterData: {
+        articles: [], // 文章列表
+      },
+      folderData: {
+        state: 0,
+        tags: [], // 标签列表
+        categories: [], // 分类列表
+      },
+      userData: {
+        userinfo: <%- JSON.stringify($userinfo || null) %>,
+        noLoginShow: 'login', // 未登录状态显示 login / register / reset ，登录状态忽略该字段
+      },
+      registerData: {
+        state: 0, time: 0, email: '', password: '', code: '', isEmail: true, isPassword: true, isCode: true
+      }
+    };
+  </script>
 </head>
 <body>
-  
   <div id="app">
-
     <div class="layout_left">
       <div class="scroll_left">
-
         <%- partial('partial/article', {article: article}) %>
-
       </div>
     </div>
-
     <div class="layout_right">
       <%- partial('partial/filter') %>
       <%- partial('partial/folder') %>
       <%- partial('partial/login') %>
       <%- partial('partial/register') %>
     </div>
-
    <%- partial('partial/nav') %>
-
   </div>
-
-
   <script src="<%= $static.css %>plugins/iscroll.js"></script>
   <script src="<%= $static.css %>plugins/vue.min.js"></script>
   <script src="<%= $static.css %>scripts/sonamu.js"></script>

@@ -11,46 +11,16 @@ const fetchOption = {
   headers: {
     'Accept': 'application/json', 
     'Content-Type': 'application/json'
-  }
+  },
+  credentials: 'include'
 };
 
 const scrollObj = {filter: null, folder: null};
 
-const vueData = {
-  showBox: 'filter', // filter(筛选) folder(分类标签)
-  searchData: { // 搜索内容
-    keywords: '', // 关键字
-    nature: 'all', // 文章来源 all(全部) original(原创) translate(翻译) reprint(转载) excerpt(节选)
-    sort: { // 排序
-      id: 'date', // 排序ID  （date, read, comment, collection, thumb）
-      type: 'desc' // 方式 desc/asc
-    }, 
-    filter: { // 筛选
-      type: '', // 筛选类型 tag/categories
-      id: '' // 筛选ID (标签/分类ID)
-    }
-  },
-  filterData: {
-    articles: [], // 文章列表
-  },
-  folderData: {
-    state: 0,
-    tags: [], // 标签列表
-    categories: [], // 分类列表
-  },
-  userData: {
-    state: 0,
-    userinfo: null,
-    noLoginShow: 'login', // 未登录状态显示 login / register / reset ，登录状态忽略该字段
-  },
-  registerData: {
-    state: 0, time: 0, email: '', password: '', code: '', isEmail: true, isPassword: true, isCode: true
-  }
-};
 
 // 加载标签，分类数据
 const folderDataLoad = () => {
-  fetch('/folder/lists')
+  fetch('/folder/lists', {...fetchOption})
     .then(res => res.json())
     .then(data => {
       if(data === -1) {
@@ -86,7 +56,7 @@ const showRightBox = {
     this.showBox = this.userData.noLoginShow = 'reset';
   },
   showUserBox() {
-    if(this.userData.state === 0) this.showBox = this.userData.noLoginShow;
+    if(!this.userData.userinfo) this.showBox = this.userData.noLoginShow;
     else this.showBox = 'user';
   }
 }
@@ -120,32 +90,37 @@ const commonMethod = {
         })
       }).then(res => res.json())
       .then(d => {
-        if(d) {
-          alert('验证码发送失败，请重试！');
+        if(d && d.code === -1) {
+          alert(d.message);
           this.registerData.time = 0;
-        }else {
+        }else{
           this.registerData.time = 60;
-          let timmer = setInterval(() => --this.registerData.time <= 0 || clearInterval(timmer), 1000);
+          let timmer = setInterval(() => --this.registerData.time <= 0 && clearInterval(timmer), 1000);
         }
       }, () => this.registerData.time = 0)
     }
   },
   // 注册
   registerFn(){
-    // if(!this.registerData.state && this.validateRegisterEmail() && this.validateRegisterCode() && this.validateRegisterPassword()) {
+    if(!this.registerData.state && this.validateRegisterEmail() && this.validateRegisterCode() && this.validateRegisterPassword()) {
       fetch('/common/register', {
         method: 'POST',
         ...fetchOption,
         body: JSON.stringify({
           email: this.registerData.email,
           password: this.registerData.password,
-          code: this.registerData.code
+          code: this.registerData.code.toUpperCase()
         })
       }).then(res => res.json())
       .then(d => {
-        console.log(d);
+        if(d.code === -1) alert(d.message);
+        else {
+          alert('注册成功！');
+          this.userData.userinfo = d;
+          this.showFilterBox();
+        }
       });
-    // }
+    }
   }
 }
 
