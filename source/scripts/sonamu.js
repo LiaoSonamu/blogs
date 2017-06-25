@@ -26,11 +26,11 @@ const folderDataLoad = () => {
       if(data === -1) {
         vueData.folderData.state = -1;
         vueData.folderData.message = '服务器异常';
-        return ;
+        return 0;
       }
       vueData.folderData.state = 1;
-      Vue.set(vueData.folderData, 'tags', data.tags);
-      Vue.set(vueData.folderData, 'categories', data.categories);
+      vueData.folderData.tags = data.tags;
+      vueData.folderData.categories = data.categories;
       $vm.$nextTick(() => new IScroll('.right-folder', scrollOption));
     });
 }
@@ -119,7 +119,7 @@ const commonMethod = {
           this.userData.userinfo = d;
           this.showFilterBox();
         }
-      });
+      }, () => alert('注册失败'));
     }
   }
 }

@@ -1,78 +1,48 @@
 <div class="scroll_right right-has-title right-user" :class="{active: showBox === 'user'}">
   <div class="scroll_right_inner">
-  
-  <template v-if="userData.state === 0">
-    <%- partial('partial/loading') %>
-  </template>
-  <template v-else-if="userData.state === 1">
-    <!--未登录状态-->
-    <template v-if="!userData.userinfo">
-      <p class="box-label"><span>登录</span></p>
-      <div class="input-box" :class="{error: !userData.login.checkUsername}">
-        <i class="fa fa-user"></i>
-        <input type="text" autocomplete="off" placeholder="用户名 (3-16位字母数字下划线)" v-model="userData.login.username" @blur="validateLoginUsername">
-      </div>
-      <div class="input-box" :class="{error: !userData.login.checkPassword}">
-        <i class="fa fa-lock"></i>
-        <input type="password" autocomplete="off" placeholder="密   码 (6-16位字母数字下划线)" v-model="userData.login.password" @blur="validateLoginPassword">
-      </div>
-      <div class="input-box btn">
-        <button>登 录</button>
-      </div>
 
-      <div class="bottom-line"></div>
-      <p class="box-label"><span>注册</span></p>
-      <div class="input-box" :class="{error: !userData.register.checkUsername}">
-        <i class="fa fa-user"></i>
-        <input type="text" autocomplete="off" placeholder="用户名 (3-16位字母数字下划线)" v-model="userData.register.username" @blur="validateRegisterUsername">
-      </div>
-      <div class="input-box" :class="{error: !userData.register.checkEmail}">
-        <i class="fa fa-envelope"></i>
-        <input type="text" autocomplete="off" placeholder="邮  箱 (用于修改、重置密码)" v-model="userData.register.email" @blur="validateRegisterEmail">
-      </div>
-      <div class="input-box" :class="{error: !userData.register.checkCode}">
-        <i class="fa fa-check-square-o"></i>
-        <input type="text" autocomplete="off" placeholder="验证码 (6位字母，不区分大小写)" v-model="userData.register.code" @blur="validateRegisterCode">
-        <a @click="sendCode('register')" :class="{disabled: userData.register.codeTime}">{{ userData.register.codeTime === 0 ? '获取' : userData.register.codeTime <= 60 ? `${userData.register.codeTime}s` : '发送中' }}</a>
-      </div>
-      <div class="input-box" :class="{error: !userData.register.checkPassword}">
-        <i class="fa fa-lock"></i>
-        <input type="password" autocomplete="off" placeholder="密   码 (6-16位字母数字下划线)" v-model="userData.register.password" @blur="validateRegisterPassword">
-      </div>
-      <div class="input-box btn">
-        <button>注 册</button>
-      </div>
+    
+    <p class="box-label"><span>修改邮箱</span><b>{{userData.userinfo.email}}</b></p>
+    <div class="input-box">
+      <i class="fa fa-envelope"></i>
+      <input type="text" placeholder="新邮箱" autocomplete="off">
+    </div>
 
-      <div class="bottom-line"></div>
-      <p class="box-label"><span>修改密码</span></p>
-      <div class="input-box" :class="{error: !userData.reset.checkEmail}">
-        <i class="fa fa-envelope"></i>
-        <input type="text" autocomplete="off" placeholder="邮  箱 (注册所填邮箱)" v-model="userData.reset.email" @blur="validateResetEmail">
-      </div>
-      <div class="input-box" :class="{error: !userData.reset.checkCode}">
-        <i class="fa fa-check-square-o"></i>
-        <input type="text" autocomplete="off" placeholder="验证码 (6位字母，不区分大小写)" v-model="userData.reset.code" @blur="validateResetCode">
-        <a @click="sendCode('reset')" :class="{disabled: userData.reset.codeTime}">{{ userData.reset.codeTime === 0 ? '获取' : userData.reset.codeTime <= 60 ? `${userData.reset.codeTime}s` : '发送中' }}</a>
-      </div>
-      <div class="input-box" :class="{error: !userData.reset.checkPassword}">
-        <i class="fa fa-lock"></i>
-        <input type="password" autocomplete="off" placeholder="新密码 (6-16位字母数字下划线)" v-model="userData.reset.password" @blur="validateResetPassword">
-      </div>
+    <div class="input-box">
+      <i class="fa fa-check-square-o"></i>
+      <input type="text" placeholder="验证码 (6位字母,不区分大小写)" autocomplete="off">
+      <a>获取</a>
+    </div>
 
-      <div class="input-box btn btn-red">
-        <button>修改密码</button>
-      </div>
-    </template>
-    <template v-else>
-      开发中...
-    </template>
-  </template>
+    <div class="bottom-line"></div>
+    
+    <p class="box-label"><span>修改昵称</span><b>{{userData.userinfo.nickname}}</b></p>
+    <div class="input-box">
+      <i class="fa fa-user"></i>
+      <input type="text" placeholder="新昵称 (3-12汉字字母数字下划线)" autocomplete="off">
+    </div>
+    
+    <div class="bottom-line"></div>
+    <p class="box-label"><span>修改密码</span></p>
+    <div class="input-box">
+      <i class="fa fa-lock"></i>
+      <input type="password" placeholder="原密码 (6-20位字母数字下划线)" autocomplete="off">
+    </div>
+
+    <div class="input-box">
+      <i class="fa fa-lock"></i>
+      <input type="password" placeholder="新密码 (6-20位字母数字下划线)" autocomplete="off">
+    </div>
+
+    <div class="button-box">修改资料</div>
+    <div class="button-box red">退出登录</div>
+
   </div>
 
   <div class="scroll_title">
     <div class="scroll_title_inner">
       <i class="fa fa-user"></i>
-      <span>登录注册</span>
+      <span>个人信息</span>
       <i class="fa fa-close" @click="showFilterBox"></i>
     </div>
   </div>

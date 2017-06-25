@@ -318,6 +318,15 @@ article {
   align-items: center;
   cursor: pointer;
   margin-bottom: 15px;
+  &:hover {
+    background: @color-highlight-active;
+  }
+  &.red {
+    background: @color-error;
+    &:hover {
+      background: @color-error-active;
+    }
+  }
 }
 
 .info-box {
