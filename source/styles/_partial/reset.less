@@ -3,6 +3,7 @@
 }
 .iScrollLoneScrollbar {
   right: 3px !important;
+  z-index: 10 !important;
 }
 .iScrollIndicator {
   border: none !important;
@@ -29,7 +30,15 @@ body, h1, h2, h3, h4, h5, h6, p, ul, ol, li, hr, blockquote, pre {
 li {
   list-style: none;
 }
-
+textarea {
+  display: block;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  color: inherit;
+  padding: 12px;
+}
 input, button {
   outline: none;
   color: inherit;
