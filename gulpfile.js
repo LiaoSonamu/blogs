@@ -31,6 +31,17 @@ gulp.task(`scripts`, () => gulp
   .pipe(gulp.dest(`public/scripts`))
 );
 
+gulp.task(`images`, () => gulp
+  .src(`source/images/**/*.{png,jpg,jpeg,ico,gif,svg}`)
+  .pipe($.cache($.imagemin({
+    optimizationLevel: 7,
+    progressive: true,
+    interlaced: true,
+    multipass: true
+  })))
+  .pipe(gulp.dest(`public/images`))
+);
+
 gulp.task(`plugins`, () => gulp
   .src(`source/plugins/**/*`)
   .pipe(gulp.dest(`public/plugins`))
@@ -39,9 +50,10 @@ gulp.task(`plugins`, () => gulp
 gulp.task(`watch`, () => {
   gulp.watch(`source/styles/**/*.less`, [`styles`]);
   gulp.watch(`source/scripts/**/*.js`, [`scripts`]);
+  gulp.watch(`source/images/**/*.{png,jpg,jpeg,ico,gif,svg}`, ['images'])
 });
 
 
-gulp.task(`default`, [`styles`, `scripts`, `plugins`], () => {
+gulp.task(`default`, [`styles`, `scripts`, `plugins`, 'images'], () => {
   isDev && gulp.run(`watch`);
 });

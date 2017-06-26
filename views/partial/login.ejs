@@ -1,39 +1,26 @@
-<div class="scroll_right right-has-title right-login" :class="{active: showBox === 'login'}">
-  <div class="scroll_right_inner">
-
-    <div class="input-box" :class="{error: !loginData.isEmail}">
-      <i class="fa fa-envelope"></i>
-      <input type="text" autocomplete="off" placeholder="邮   箱" spellcheck="false"
-        v-model="loginData.email"
-        @blur="validateLoginEmail"
-        @input="loginData.isEmail || validateLoginEmail()">
-    </div>
-
-    <div class="input-box" :class="{error: !loginData.isPassword}">
-      <i class="fa fa-lock"></i>
-      <input type="password" autocomplete="off" placeholder="密   码 (6-20位字母数字下划线)" spellcheck="false"
-        v-model="loginData.password"
-        @blur="validateLoginPassword"
-        @input="loginData.isPassword || validateLoginPassword()">
-    </div>
-
-    <div class="button-box" @click="loginFn" :class="{loading: loginData.state}">
-      <i class="fa fa-spinner fa-pulse"></i> {{ loginData.state ? '登 录 中' : '登 录'  }}
-    </div>
-
-    <p class="info-box">
-      <a>忘记密码</a>
-      <a @click="showRegisterBox">注册新用户</a>
-    </p>
-
-  </div>
-
-
-  <div class="scroll_title">
-    <div class="scroll_title_inner">
-      <i class="fa fa-user-circle"></i>
-      <span>登 录</span>
-      <i class="fa fa-close" @click="showFilterBox"></i>
-    </div>
-  </div>
+<div class="input-box" :class="{error: !loginData.isEmail}">
+  <i class="fa fa-envelope"></i>
+  <input type="text" autocomplete="off" placeholder="邮   箱" spellcheck="false"
+    v-model="loginData.email"
+    @blur="validateLoginEmail"
+    @keyup.13="loginFn"
+    @input="loginData.isEmail || validateLoginEmail()">
 </div>
+
+<div class="input-box" :class="{error: !loginData.isPassword}">
+  <i class="fa fa-lock"></i>
+  <input type="password" autocomplete="off" placeholder="密   码 (6-20位字母数字下划线)" spellcheck="false"
+    v-model="loginData.password"
+    @blur="validateLoginPassword"
+    @keyup.13="loginFn"
+    @input="loginData.isPassword || validateLoginPassword()">
+</div>
+
+<div class="button-box" @click="loginFn" :class="{loading: loginData.state}">
+  <i class="fa fa-spinner fa-pulse"></i> {{ loginData.state ? '登 录 中' : '登 录'  }}
+</div>
+
+<p class="info-box">
+  <a>忘记密码</a>
+  <a @click="rightBoxGo('register')">注册新用户</a>
+</p>

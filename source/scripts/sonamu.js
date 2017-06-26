@@ -1,4 +1,4 @@
-var $vm = null;
+let $vm = null;
 // 自定义滚动条配置
 const scrollOption = {
   mouseWheel: true,
@@ -39,25 +39,35 @@ const folderDataLoad = () => {
 
 // 打开某个right
 const showRightBox = {
-  showFolderBox() {
-    this.showBox = 'folder';
-    if(this.folderData.state !== 1) folderDataLoad();
+  rightBoxGo(box) {
+    let i = this.historyBox.indexOf(box);
+    if(~i) box = this.historyBox.splice(i, 1)[0];
+    this.historyBox.push(box);
+    let {title, noctrls} = this[`${box}Data`];
+    this.showBoxData.title = title;
+    this.showBoxData.noctrls = noctrls;
+    // 需要加载的页面
+    switch(box) {
+      case 'folder': this.folderData.state !== 1 && folderDataLoad(); break;
+    }
   },
-  showFilterBox() {
-    this.showBox = 'filter';
+  rightBoxBack() {
+    this.historyBox.pop();
+    let box = this.historyBox[this.historyBox.length - 1];
+    let {title, noctrls} = this[`${box}Data`];
+    this.showBoxData.title = title;
+    this.showBoxData.noctrls = noctrls;
   },
-  showLoginBox() {
-    this.showBox = this.userData.noLoginShow = 'login';
+  rightBoxHome() {
+    this.historyBox.splice(1);
+    let box = this.historyBox[this.historyBox.length - 1];
+    let {title, noctrls} = this[`${box}Data`];
+    this.showBoxData.title = title;
+    this.showBoxData.noctrls = noctrls;
   },
-  showRegisterBox() {
-    this.showBox = this.userData.noLoginShow = 'register';
-  },
-  showResetBox() {
-    this.showBox = this.userData.noLoginShow = 'reset';
-  },
-  showUserBox() {
-    if(!this.userinfo) this.showBox = this.userData.noLoginShow;
-    else this.showBox = 'user';
+  // 删除历史记录中的某些页面值， 避免在登录成功后返回到登录，注册等页面
+  historyRemove(...x) {
+    this.historyBox = this.historyBox.filter(v => !~x.indexOf(v));
   }
 }
 
@@ -120,7 +130,8 @@ const commonMethod = {
         // 登录成功
         if(d && d.code != -1) {
           this.userinfo = d;
-          this.showFilterBox();
+          this.rightBoxGo('ucenter');
+          this.historyRemove('login', 'register');
         }else alert(d.message);
       }, () => {
         alert('登录失败');
@@ -146,7 +157,8 @@ const commonMethod = {
         if(d.code === -1) alert(d.message);
         else {
           this.userinfo = d;
-          this.showFilterBox();
+          this.rightBoxGo('ucenter');
+          this.historyRemove('login', 'register');
         }
       }, () => {
         alert('注册失败');

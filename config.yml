@@ -9,7 +9,8 @@ mail:
     pass: bntkdjqcdccuebhi
 
 # APP配置 (项目内部配置)
-static: # 静态资源文件路径
-  css: /
-  js: /
-  images: /
+static: # 静态资源文件路径 以/结尾
+  css: http://localhost/
+  js: http://localhost/
+  images: http://localhost/
+  avatar: images/avatar.png

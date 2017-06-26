@@ -6,7 +6,7 @@
 
 .layout_left {
   width: 75%;
-  float: right;
+  float: left;
   height: 100%;
   position: relative;
 }
@@ -14,7 +14,7 @@
 .layout_right {
   width: 25%;
   position: relative;
-  float: right;
+  float: left;
   height: 100%;
 }
 
@@ -24,9 +24,9 @@
 }
 
 .scroll_right {
-  display: none;
   height: 100%;
   padding-right: 13px;
+  display: none;
   &.active {
     display: block;
   }
@@ -37,7 +37,10 @@
 .scroll_right_inner {
   background: @bg-box;
   min-height: 100%;
-  padding: 25px 15px 15px;
+  padding: 20px 15px 15px;
+  &.no-padding {
+    padding: 0;
+  }
 }
 
 .scroll_title {
@@ -59,10 +62,11 @@
     display: flex;
     align-items: center;
     span {
-      margin-left: 10px;
       flex: 1;
+      text-align: center;
     }
-    .fa-close {
+    .fa {
+      display: none;
       cursor: pointer;
     }
     &:after {
@@ -75,6 +79,11 @@
       left: 0;
       background: hsla(0,0%,100%,.1);
     }
+    &.show-ctrls {
+      .fa {
+        display: inline-block;
+      }
+    }
   }
 }
 
@@ -84,7 +93,7 @@ header {
 }
 
 nav {
-  position: fixed;
+  position: absolute;
   z-index: 100;
   background: rgb(68, 68, 68);
   width: 40px;
@@ -283,7 +292,6 @@ article {
     border: 1px solid @color-error;
   }
   a {
-    cursor: pointer;
     white-space: nowrap;
     &.disabled {
       text-decoration: none;
@@ -341,9 +349,6 @@ article {
 .info-box {
   display: flex;
   justify-content: space-between;
-  a {
-    cursor: pointer;
-  }
 }
 
 .box-label {
@@ -388,3 +393,137 @@ article {
   }
 }
 
+.ucenter-header {
+  background: 100px;
+  background: @bg-box;
+  display: flex;
+  padding: 15px 10px;
+  align-items: center;
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  .user-info {
+    padding-left: 10px;
+    flex: 1;
+    overflow: hidden;
+    h6, p {
+      width: 100%;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    h6 {
+      font-size: 15px;
+      span {
+        font-size: 12px;
+        opacity: 0.5;
+        margin-left: 5px;
+        font-weight: normal;
+      }
+    }
+    p {
+      font-size: 12px;
+      opacity: 0.5;
+      margin-top: 5px;
+    }
+  }
+}
+
+.ucenter-total {
+  display: flex;
+  background: @bg-box;
+  position: relative;
+  margin-bottom: 8px;
+  &::after, &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 1px;
+    width: 100%;
+    background: linear-gradient(to right,transparent,hsla(0,0%,100%,.1) 20%,hsla(0,0%,100%,.1) 80%,transparent);
+  }
+  &::after {
+    top: auto;
+    bottom: 0;
+  }
+  span {
+    flex: 1;
+    position: relative;
+    padding: 10px 0;
+    &:not(:last-child)::after {
+      content: '';
+      display: block;
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 1px;
+      height: 100%;
+      background: linear-gradient(to bottom,transparent,hsla(0,0%,100%,.1) 20%,hsla(0,0%,100%,.1) 80%,transparent);
+    }
+    i, b {
+      display: block;
+      text-align: center;
+      font-size: 15px;
+    }
+    i {
+      font-style: normal;
+      font-size: 12px;
+      opacity: 0.5;
+      margin-top: 5px;
+    }
+  }
+}
+
+.option-lists {
+  background: @bg-box;
+  margin-bottom: 8px;
+  li {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    position: relative;
+    cursor: pointer;
+    &:hover {
+      background: @bg-box;
+    }
+    &:not(:last-child)::after {
+      content: '';
+      display: block;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      width: 100%;
+      background: linear-gradient(to right,transparent,hsla(0,0%,100%,.1) 20%,hsla(0,0%,100%,.1) 80%,transparent);
+    }
+    span {
+      flex: 1;
+      em {
+        font-size: 12px;
+        opacity: 0.5;
+        font-style: normal;
+        margin-left: 10px;
+      }
+    }
+    .fa {
+      width: 20px;
+      text-align: center;
+      margin-right: 10px;
+    }
+    .fa-angle-right {
+      font-size: 18px;
+    }
+
+    &.no-right {
+      cursor: default;
+      &:hover {
+        background: transparent;
+      }
+    }
+  }
+}

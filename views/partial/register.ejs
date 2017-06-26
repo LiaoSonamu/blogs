@@ -1,48 +1,36 @@
-<div class="scroll_right right-has-title right-register" :class="{active: showBox === 'register'}">
-  <div class="scroll_right_inner">
-
-    <div class="input-box" :class="{error: !registerData.isEmail}">
-      <i class="fa fa-envelope"></i>
-      <input type="text" autocomplete="off" placeholder="邮  箱" spellcheck="false"
-        v-model="registerData.email"
-        @blur="validateRegisterEmail"
-        @input="registerData.isEmail || validateRegisterEmail()">
-    </div>
-
-    <div class="input-box" :class="{error: !registerData.isCode}">
-      <i class="fa fa-check-square-o"></i>
-      <input type="text" autocomplete="off" placeholder="验证码 (6位字母,不区分大小写)" spellcheck="false"
-        v-model="registerData.code"
-        @blur="validateRegisterCode"
-        @input="registerData.isCode || validateRegisterCode()">
-      <a @click="sendRegisterCode" :class="{disabled: registerData.time}">{{ registerData.time <= 0 ? '获取' : registerData.time <= 60 ? `${registerData.time}秒` : '发送中' }}</a>
-    </div>
-
-    <div class="input-box" :class="{error: !registerData.isPassword}">
-      <i class="fa fa-lock"></i>
-      <input type="password" autocomplete="off" placeholder="密   码 (6-20位字母数字下划线)" spellcheck="false"
-        v-model="registerData.password"
-        @blur="validateRegisterPassword"
-        @input="registerData.isPassword || validateRegisterPassword()">
-    </div>
-
-    <div class="button-box" @click="registerFn" :class="{loading: registerData.state}">
-      <i class="fa fa-spinner fa-pulse"></i> {{ registerData.state ? '注 册 中' : '注 册'  }}
-    </div>
-
-    <p class="info-box">
-      <a @click="showLoginBox">返回登录</a>
-      <a></a>
-    </p>
-
-  </div>
-
-
-  <div class="scroll_title">
-    <div class="scroll_title_inner">
-      <i class="fa fa-user-circle-o"></i>
-      <span>注 册</span>
-      <i class="fa fa-close" @click="showFilterBox"></i>
-    </div>
-  </div>
+<div class="input-box" :class="{error: !registerData.isEmail}">
+  <i class="fa fa-envelope"></i>
+  <input type="text" autocomplete="off" placeholder="邮  箱" spellcheck="false"
+    v-model="registerData.email"
+    @blur="validateRegisterEmail"
+    @keyup.13="registerFn"
+    @input="registerData.isEmail || validateRegisterEmail()">
 </div>
+
+<div class="input-box" :class="{error: !registerData.isCode}">
+  <i class="fa fa-check-square-o"></i>
+  <input type="text" autocomplete="off" placeholder="验证码 (6位字母,不区分大小写)" spellcheck="false"
+    v-model="registerData.code"
+    @blur="validateRegisterCode"
+    @keyup.13="registerFn"
+    @input="registerData.isCode || validateRegisterCode()">
+  <a @click="sendRegisterCode" :class="{disabled: registerData.time}">{{ registerData.time <= 0 ? '获取' : registerData.time <= 60 ? `${registerData.time}秒` : '发送中' }}</a>
+</div>
+
+<div class="input-box" :class="{error: !registerData.isPassword}">
+  <i class="fa fa-lock"></i>
+  <input type="password" autocomplete="off" placeholder="密   码 (6-20位字母数字下划线)" spellcheck="false"
+    v-model="registerData.password"
+    @blur="validateRegisterPassword"
+    @keyup.13="registerFn"
+    @input="registerData.isPassword || validateRegisterPassword()">
+</div>
+
+<div class="button-box" @click="registerFn" :class="{loading: registerData.state}">
+  <i class="fa fa-spinner fa-pulse"></i> {{ registerData.state ? '注 册 中' : '注 册'  }}
+</div>
+
+<p class="info-box">
+  <a @click="rightBoxGo('login')">返回登录</a>
+  <a></a>
+</p>
