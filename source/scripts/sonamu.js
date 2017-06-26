@@ -1,9 +1,10 @@
-let $vm = null;
+let $vm = null, mainScroll = null;
 // 自定义滚动条配置
 const scrollOption = {
   mouseWheel: true,
   scrollbars: true,
   bounce: false,
+  preventDefault: false,
   interactiveScrollbars: true
 };
 
@@ -91,6 +92,9 @@ const validateFns = {
 
 // 公共method
 const commonMethod = {
+  scrollTop() {
+    mainScroll.scrollTo(0, 0);
+  },
   sendRegisterCode(){
     if(!this.registerData.time && this.validateRegisterEmail()) {
       this.registerData.time = 61;
@@ -175,7 +179,7 @@ $vm = new Vue({
   el: '#app',
   data: vueData,
   mounted() {
-    new IScroll('.layout_left', scrollOption);
+    mainScroll = new IScroll('.layout_left', scrollOption);
   },
   methods: {
     ...showRightBox,
