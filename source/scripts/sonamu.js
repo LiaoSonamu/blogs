@@ -107,6 +107,25 @@ const commonMethod = {
   loginFn(){
     if(!this.loginData.state && this.validateLoginEmail() && this.validateLoginPassword()) {
       this.loginData.state = 1;
+      fetch('/common/login', {
+        method: 'POST',
+        ...fetchOption,
+        body: JSON.stringify({
+          email: this.loginData.email,
+          password: this.loginData.password,
+        })
+      }).then(res => res.json())
+      .then(d => {
+        this.loginData.state = 0;
+        // 登录成功
+        if(d && d.code != -1) {
+          this.userinfo = d;
+          this.showFilterBox();
+        }else alert(d.message);
+      }, () => {
+        alert('登录失败');
+        this.loginData.state = 0;
+      });
     }
   },
   // 注册
@@ -126,13 +145,12 @@ const commonMethod = {
         this.registerData.state = 0;
         if(d.code === -1) alert(d.message);
         else {
-          alert('注册成功！');
           this.userinfo = d;
           this.showFilterBox();
         }
       }, () => {
+        alert('注册失败');
         this.registerData.state = 0
-        alert('注册失败')
       });
     }
   }

@@ -8,7 +8,7 @@ const createCode = () => '000000'.replace(/0/g, v => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ
 
 module.exports = app => {
   
-  // 登录
+  // 发送验证码
   router.post('/sendCode', (req, res) => {  
     let {email, type} = req.body;
     userModel.findByEmail(email).then(r => {
@@ -26,6 +26,22 @@ module.exports = app => {
         }
       });
     }).then(r => res.json(r), e => res.json({code: -1, message: e}));
+  });
+
+  // 登录
+  router.post('/login', (req, res) => {
+    let {email, password} = req.body;
+    password = crypto.createHash('md5').update(password).digest('hex');
+    userModel.findOne({email: email, password: password}, '-password', (e, r) => {
+      if(e) res.json({code: -1, message: '服务器异常'});
+      else {
+        if(!r) res.json({code: -1, message: '邮箱或者密码错误'});
+        else {
+          req.session.userinfo = r;
+          res.json(r);
+        }
+      }
+    })
   });
 
   // 注册
