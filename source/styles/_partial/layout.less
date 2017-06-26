@@ -318,6 +318,15 @@ article {
   align-items: center;
   cursor: pointer;
   margin-bottom: 15px;
+  .fa {
+    display: none;
+    margin-right: 10px;
+  }
+  &.loading {
+    .fa {
+      display: inline-block;
+    }
+  }
   &:hover {
     background: @color-highlight-active;
   }

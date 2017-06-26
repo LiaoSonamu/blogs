@@ -103,9 +103,16 @@ const commonMethod = {
       }, () => this.registerData.time = 0)
     }
   },
+  // 登录
+  loginFn(){
+    if(!this.loginData.state && this.validateLoginEmail() && this.validateLoginPassword()) {
+      this.loginData.state = 1;
+    }
+  },
   // 注册
   registerFn(){
     if(!this.registerData.state && this.validateRegisterEmail() && this.validateRegisterCode() && this.validateRegisterPassword()) {
+      this.registerData.state = 1;
       fetch('/common/register', {
         method: 'POST',
         ...fetchOption,
@@ -116,13 +123,17 @@ const commonMethod = {
         })
       }).then(res => res.json())
       .then(d => {
+        this.registerData.state = 0;
         if(d.code === -1) alert(d.message);
         else {
           alert('注册成功！');
           this.userinfo = d;
           this.showFilterBox();
         }
-      }, () => alert('注册失败'));
+      }, () => {
+        this.registerData.state = 0
+        alert('注册失败')
+      });
     }
   }
 }

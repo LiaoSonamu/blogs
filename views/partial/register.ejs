@@ -26,7 +26,9 @@
         @input="registerData.isPassword || validateRegisterPassword()">
     </div>
 
-    <div class="button-box" @click="registerFn">注 册</div>
+    <div class="button-box" @click="registerFn" :class="{loading: registerData.state}">
+      <i class="fa fa-spinner fa-pulse"></i> {{ registerData.state ? '注 册 中' : '注 册'  }}
+    </div>
 
     <p class="info-box">
       <a @click="showLoginBox">返回登录</a>
