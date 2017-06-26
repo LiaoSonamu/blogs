@@ -3,7 +3,7 @@
 
     <div class="input-box" :class="{error: !registerData.isEmail}">
       <i class="fa fa-envelope"></i>
-      <input type="text" autocomplete="off" placeholder="邮  箱" 
+      <input type="text" autocomplete="off" placeholder="邮  箱" spellcheck="false"
         v-model="registerData.email"
         @blur="validateRegisterEmail"
         @input="registerData.isEmail || validateRegisterEmail()">
@@ -11,7 +11,7 @@
 
     <div class="input-box" :class="{error: !registerData.isCode}">
       <i class="fa fa-check-square-o"></i>
-      <input type="text" autocomplete="off" placeholder="验证码 (6位字母,不区分大小写)" 
+      <input type="text" autocomplete="off" placeholder="验证码 (6位字母,不区分大小写)" spellcheck="false"
         v-model="registerData.code"
         @blur="validateRegisterCode"
         @input="registerData.isCode || validateRegisterCode()">
@@ -20,7 +20,7 @@
 
     <div class="input-box" :class="{error: !registerData.isPassword}">
       <i class="fa fa-lock"></i>
-      <input type="password" autocomplete="off" placeholder="密   码 (6-20位字母数字下划线)" 
+      <input type="password" autocomplete="off" placeholder="密   码 (6-20位字母数字下划线)" spellcheck="false"
         v-model="registerData.password"
         @blur="validateRegisterPassword"
         @input="registerData.isPassword || validateRegisterPassword()">
@@ -29,8 +29,8 @@
     <div class="button-box" @click="registerFn">注 册</div>
 
     <p class="info-box">
-      <a></a>
       <a @click="showLoginBox">返回登录</a>
+      <a></a>
     </p>
 
   </div>

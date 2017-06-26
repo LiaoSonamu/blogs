@@ -9,6 +9,7 @@
   <script>
     var vueData = {
       showBox: 'filter', // filter(筛选) folder(分类标签)
+      userinfo: <%- JSON.stringify($userinfo || null) %>,
       searchData: { // 搜索内容
         keywords: '', // 关键字
         nature: 'all', // 文章来源 all(全部) original(原创) translate(翻译) reprint(转载) excerpt(节选)
@@ -30,8 +31,10 @@
         categories: [], // 分类列表
       },
       userData: {
-        userinfo: <%- JSON.stringify($userinfo || null) %>,
         noLoginShow: 'login', // 未登录状态显示 login / register / reset ，登录状态忽略该字段
+      },
+      loginData: {
+        state: 0, time: 0, email: '', password: '', isEmail: true, isPassword: true
       },
       registerData: {
         state: 0, time: 0, email: '', password: '', code: '', isEmail: true, isPassword: true, isCode: true
@@ -49,7 +52,6 @@
     <div class="layout_right">
       <%- partial('partial/filter') %>
       <%- partial('partial/folder') %>
-      <%- partial('partial/user') %>
       <%- partial('partial/login') %>
       <%- partial('partial/register') %>
     </div>

@@ -1,14 +1,20 @@
 <div class="scroll_right right-has-title right-login" :class="{active: showBox === 'login'}">
   <div class="scroll_right_inner">
 
-    <div class="input-box">
-      <i class="fa fa-user"></i>
-      <input type="text" autocomplete="off" placeholder="用户名 (6-20汉字字母数字下划线)">
+    <div class="input-box" :class="{error: !loginData.isEmail}">
+      <i class="fa fa-envelope"></i>
+      <input type="text" autocomplete="off" placeholder="邮   箱" spellcheck="false"
+        v-model="loginData.email"
+        @blur="validateLoginEmail"
+        @input="loginData.isEmail || validateLoginEmail()">
     </div>
 
-    <div class="input-box">
+    <div class="input-box" :class="{error: !loginData.isPassword}">
       <i class="fa fa-lock"></i>
-      <input type="password" autocomplete="off" placeholder="密   码 (6-20位字母数字下划线)">
+      <input type="password" autocomplete="off" placeholder="密   码 (6-20位字母数字下划线)" spellcheck="false"
+        v-model="loginData.password"
+        @blur="validateLoginPassword"
+        @input="loginData.isPassword || validateLoginPassword()">
     </div>
 
     <div class="button-box">登 录</div>

@@ -56,7 +56,7 @@ const showRightBox = {
     this.showBox = this.userData.noLoginShow = 'reset';
   },
   showUserBox() {
-    if(!this.userData.userinfo) this.showBox = this.userData.noLoginShow;
+    if(!this.userinfo) this.showBox = this.userData.noLoginShow;
     else this.showBox = 'user';
   }
 }
@@ -70,6 +70,9 @@ const validate = {
 }
 
 const validateFns = {
+  // 登录验证
+  validateLoginEmail(){ return this.loginData.isEmail = validate.email.test(this.loginData.email) },
+  validateLoginPassword() { return this.loginData.isPassword = validate.password.test(this.loginData.password) },
   // 注册验证
   validateRegisterPassword() { return this.registerData.isPassword = validate.password.test(this.registerData.password) },
   validateRegisterEmail() { return this.registerData.isEmail = validate.email.test(this.registerData.email) },
@@ -116,7 +119,7 @@ const commonMethod = {
         if(d.code === -1) alert(d.message);
         else {
           alert('注册成功！');
-          this.userData.userinfo = d;
+          this.userinfo = d;
           this.showFilterBox();
         }
       }, () => alert('注册失败'));
