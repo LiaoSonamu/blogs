@@ -10,7 +10,7 @@ const tagSchema = new mongoose.Schema({
 tagSchema.statics = {
   // 查询所有
   findAll() {
-    return new Promise((resolve, reject) => this.model('tag').find((err, result) => err ? reject(err) : resolve(result)));
+    return new Promise((resolve, reject) => this.model('tag').find((err, result) => err ? reject('服务器异常') : resolve(result)));
   }
 };
 

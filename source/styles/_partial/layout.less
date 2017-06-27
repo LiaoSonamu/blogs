@@ -368,9 +368,6 @@ article {
 .box-list {
   display: flex;
   flex-wrap: wrap;
-  &.box-list-category:not(:last-child) {
-    margin-bottom: 15px;
-  }
   li {
     background: @bg-box;
     margin: 5px;
@@ -379,15 +376,6 @@ article {
     &:hover {
       cursor: pointer;
     }
-    .fa {
-      margin-right: 5px;
-    }
-    &.desc {
-      .fa {
-        transform: rotateZ(180deg);
-      }
-    }
-
     &.active, &:hover {
       color: @color-highlight;
     }

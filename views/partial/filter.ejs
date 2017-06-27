@@ -1,37 +1,27 @@
-<div class="input-box">
-  <i class="fa fa-search"></i>
-  <input type="text" autocomplete="off" autofocus="autofocus" spellcheck="false" placeholder="输入关键字搜索文章" v-model="searchData.keywords">
-  <span @click="rightBoxGo('folder')">标签分类</span>
-</div>
+<template v-if="filterData.state === 1">
+  <p class="box-label"><span>文章来源</span></p>
 
-<div class="bottom-line"></div>
+  <ul class="box-list">
+    <li :class="{active: searchData.nature === 'all'}">全部</li>
+    <li :class="{active: searchData.nature === 'original'}">原创</li>
+    <li :class="{active: searchData.nature === 'translate'}">翻译</li>
+    <li :class="{active: searchData.nature === 'reprint'}">转载</li>
+    <li :class="{active: searchData.nature === 'excerpt'}">节选</li>
+  </ul>
 
-<p class="box-label">
-  <span>排序方式</span>
-  <b>重复选择修改升降序</b>
-</p>
+  <div class="bottom-line"></div>
+  <p class="box-label"><span>栏目类别</span></p>
+  <ul class="box-list">
+    <li v-for="category in filterData.categories" :_id="category._id">{{ category.name }}</li>
+  </ul>
 
-<ul class="box-list">
-  <!--desc-->
-  <li class="active"><i class="fa fa-sort-amount-asc"></i>发布日期</li>
-  <li><i class="fa fa-sort-amount-asc"></i>阅读</li>
-  <li><i class="fa fa-sort-amount-asc"></i>评论</li>
-  <li><i class="fa fa-sort-amount-asc"></i>收藏</li>
-  <li><i class="fa fa-sort-amount-asc"></i>点赞</li>
-</ul>
-
-<div class="bottom-line"></div>
-
-<p class="box-label">
-  <span>文章来源</span>
-</p>
-
-<ul class="box-list">
-  <li :class="{active: searchData.nature === 'all'}">全部</li>
-  <li :class="{active: searchData.nature === 'original'}">原创</li>
-  <li :class="{active: searchData.nature === 'translate'}">翻译</li>
-  <li :class="{active: searchData.nature === 'reprint'}">转载</li>
-  <li :class="{active: searchData.nature === 'excerpt'}">节选</li>
-</ul>
-
-<div class="bottom-line"></div>
+  <div class="bottom-line"></div>
+  <p class="box-label"><span>标签云</span></p>
+  <ul class="box-list">
+    <li v-for="tag in filterData.tags" :_id="tag._id">{{ tag.name }}</li>
+  </ul>
+  
+</template>
+<template v-else-if="filterData.state === 0">
+  <%- partial('partial/loading') %>
+</template>

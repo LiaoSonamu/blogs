@@ -1,4 +1,9 @@
-let $vm = null, mainScroll = null;
+let hljs = require('highlight.js');
+
+let $vm = null, 
+mainScroll = null, postFilterScroll = null, postViewScroll = null,
+filterScroll = null;
+
 // 自定义滚动条配置
 const scrollOption = {
   mouseWheel: true,
@@ -16,23 +21,20 @@ const fetchOption = {
   credentials: 'include'
 };
 
-const scrollObj = {filter: null, folder: null};
-
-
-// 加载标签，分类数据
-const folderDataLoad = () => {
-  fetch('/folder/lists', {...fetchOption})
+// 加载标签，分类数据等筛选数据
+const filterLists = () => {
+  fetch('/filter/lists', {...fetchOption})
     .then(res => res.json())
-    .then(data => {
-      if(data === -1) {
-        vueData.folderData.state = -1;
-        vueData.folderData.message = '服务器异常';
-        return 0;
+    .then(d => {
+      if(d.code === -1) {
+        vueData.filterData.state = -1;
+        vueData.filterData.message = '服务器异常';
+      }else{
+        vueData.filterData.state = 1;
+        vueData.filterData.tags = d.tags;
+        vueData.filterData.categories = d.categories;
       }
-      vueData.folderData.state = 1;
-      vueData.folderData.tags = data.tags;
-      vueData.folderData.categories = data.categories;
-      $vm.$nextTick(() => new IScroll('.right-folder', scrollOption));
+      $vm.$nextTick(() => filterScroll = new IScroll('.right-filter', scrollOption));
     });
 }
 
@@ -49,7 +51,7 @@ const showRightBox = {
     this.showBoxData.noctrls = noctrls;
     // 需要加载的页面
     switch(box) {
-      case 'folder': this.folderData.state !== 1 && folderDataLoad(); break;
+      case 'filter': this.filterData.state !== 1 && filterLists(); break;
     }
   },
   rightBoxBack() {
@@ -69,6 +71,28 @@ const showRightBox = {
   // 删除历史记录中的某些页面值， 避免在登录成功后返回到登录，注册等页面
   historyRemove(...x) {
     this.historyBox = this.historyBox.filter(v => !~x.indexOf(v));
+  },
+  // 打开发布编辑器
+  showPost() {
+    this.post.isShow = true;
+  }
+}
+
+// 发布文章或者编辑文章相关
+const postArticles = {
+  postArticleChange() {
+    this.post.html = markdownit({
+      html: true,
+      highlight: function (str, lang) {
+        if (lang && hljs.getLanguage(lang))
+          try {
+            return hljs.highlight(lang, str).value;
+          } catch (__) {};
+        return ''; // use external default escaping
+      }
+    }).render(this.post.markdown);
+
+    $vm.$nextTick(() => postViewScroll.refresh());
   }
 }
 
@@ -132,7 +156,7 @@ const commonMethod = {
       .then(d => {
         this.loginData.state = 0;
         // 登录成功
-        if(d && d.code != -1) {
+        if(d.code != -1) {
           this.userinfo = d;
           this.rightBoxGo('ucenter');
           this.historyRemove('login', 'register');
@@ -180,11 +204,14 @@ $vm = new Vue({
   data: vueData,
   mounted() {
     mainScroll = new IScroll('.layout_left', scrollOption);
+    postFilterScroll = new IScroll('.post-box-info', scrollOption);
+    postViewScroll = new IScroll('.post-box-view', scrollOption);
   },
   methods: {
     ...showRightBox,
     ...validateFns,
-    ...commonMethod
+    ...commonMethod,
+    ...postArticles
   }
 });
 

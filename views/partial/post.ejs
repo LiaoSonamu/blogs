@@ -1,3 +1,24 @@
-<div class="post-box">
+<div class="post-box" :class="{active: post.isShow}">
   
+  <template v-if="post.state === 1">
+    <div class="post-box-info">
+      <div class="scroll_right_inner">
+
+      </div>
+    </div>
+
+    <div class="post-box-view">
+      <article v-html="post.html"></article>
+    </div>
+
+    <div class="post-box-edit">
+      <input type="text" class="post-box-title" autocomplete="off" placeholder="文章标题(30字以内)" v-model="post.title" spellcheck="false">
+      <div class="bottom-line"></div>
+      <textarea class="post-box-content" spellcheck="false" v-model="post.markdown" @input="postArticleChange" placeholder="文章内容"></textarea>
+    </div>
+  </template>
+  <template v-else>
+    <%- partial('partial/loading') %>
+  </template>
+
 </div>

@@ -9,30 +9,34 @@
   
   <script>
     var vueData = {
-      historyBox: ['filter'], // 右侧历史页面，默认打开filter
-      showBoxData: {title: '筛选列表', noctrls: true},
+      historyBox: ['lists'], // 右侧历史页面，默认打开filter
+      showBoxData: {title: '文章列表', noctrls: true},
       userinfo: <%- JSON.stringify($userinfo || null) %>,
       searchData: { // 搜索内容
         keywords: '', // 关键字
-        nature: 'all', // 文章来源 all(全部) original(原创) translate(翻译) reprint(转载) excerpt(节选)
-        sort: { // 排序
-          id: 'date', // 排序ID  （date, read, comment, collection, thumb）
-          type: 'desc' // 方式 desc/asc
-        }, 
+        nature: 'all', // 文章来源 all(全部) original(原创) translate(翻译) reprint(转载) excerpt(节选) 
         filter: { // 筛选
           type: '', // 筛选类型 tag/categories
           id: '' // 筛选ID (标签/分类ID)
         }
       },
+      post: {
+        state: 1,
+        isShow: true,
+        // isShow: false,
+        title: '',
+        markdown: '',
+        html: '文章预览区域'
+      },
 
-      filterData: {
-        title: '筛选列表',
+      listsData: {
+        title: '文章列表',
         noctrls: true, // 不包含返回，关闭按钮
         articles: [], // 文章列表
       },
-      folderData: {
+      filterData: {
         state: 0,
-        title: '标签分类',
+        title: '高级筛选',
         tags: [], // 标签列表
         categories: [], // 分类列表
       },
@@ -66,25 +70,25 @@
       <div class="scroll_title">
         <div class="scroll_title_inner" :class="{'show-ctrls': !showBoxData.noctrls}">
           <i class="fa fa-arrow-left" @click="rightBoxBack"></i>
-          <span v-html="showBoxData.title">筛选列表</span>
+          <span v-html="showBoxData.title">文章列表</span>
           <i class="fa fa-close" @click="rightBoxHome"></i>
         </div>
       </div>
 
       <!--搜索列表-->
-      <div class="scroll_right right-has-title right-filter" :class="{active: historyBox[historyBox.length - 1] === 'filter'}">
+      <div class="scroll_right right-has-title right-lists" :class="{active: historyBox[historyBox.length - 1] === 'lists'}">
         <div class="scroll_right_inner">
-          <template v-if="historyBox[historyBox.length - 1] === 'filter'">
-            <%- partial('partial/filter') %>
+          <template v-if="historyBox[historyBox.length - 1] === 'lists'">
+            <%- partial('partial/lists') %>
           </template>
         </div>
       </div>
 
       <!--标签分类-->
-      <div class="scroll_right right-has-title right-folder" :class="{active: historyBox[historyBox.length - 1] === 'folder'}">
+      <div class="scroll_right right-has-title right-filter" :class="{active: historyBox[historyBox.length - 1] === 'filter'}">
         <div class="scroll_right_inner">
-          <template v-if="historyBox[historyBox.length - 1] === 'folder'">
-            <%- partial('partial/folder') %>
+          <template v-if="historyBox[historyBox.length - 1] === 'filter'">
+            <%- partial('partial/filter') %>
           </template>
         </div>
       </div>
@@ -122,6 +126,8 @@
   </div>
   <script src="<%= $static.plugins %>iscroll.js"></script>
   <script src="<%= $static.plugins %>vue.min.js"></script>
+  <script src="<%= $static.plugins %>vue.min.js"></script>
+  <script src="<%= $static.plugins %>markdown-it.min.js"></script>
   <script src="<%= $static.scripts %>sonamu.js"></script>
 </body>
 </html>
