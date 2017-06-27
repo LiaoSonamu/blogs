@@ -17,5 +17,14 @@ module.exports = app =>{
     );
   });
 
+  // 新增标签
+  router.post(`/tag`, (req, res) => {
+    new TagModel({name: req.body.name}).save((e, r) => e ? res.json({code: -1, message: '服务器异常'}) : res.json(r));
+  });
+
+  // 新增分类
+  router.post('/category', (req, res) => {
+    new CategoryModel({name: req.body.name}).save((e, r) => e ? res.json({code: -1, message: '服务器异常'}) : res.json(r));
+  });
   app.use('/filter', router);
 }

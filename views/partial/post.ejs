@@ -6,10 +6,10 @@
         <p class="box-label"><span>文章来源</span></p>
 
         <ul class="box-list">
-          <li :class="{active: post.nature === 'original'}" @click="postChageNature('original')">原创</li>
-          <li :class="{active: post.nature === 'translate'}" @click="postChageNature('translate')">翻译</li>
-          <li :class="{active: post.nature === 'reprint'}" @click="postChageNature('reprint')">转载</li>
-          <li :class="{active: post.nature === 'excerpt'}" @click="postChageNature('excerpt')">节选</li>
+          <li :class="{active: post.nature === 'original'}" @click="postChangeNature('original')">原创</li>
+          <li :class="{active: post.nature === 'translate'}" @click="postChangeNature('translate')">翻译</li>
+          <li :class="{active: post.nature === 'reprint'}" @click="postChangeNature('reprint')">转载</li>
+          <li :class="{active: post.nature === 'excerpt'}" @click="postChangeNature('excerpt')">节选</li>
         </ul>
 
         <input type="text" placeholder="原文地址" class="post-link" v-model="post.link" v-if="post.nature != 'original'">
@@ -17,14 +17,33 @@
         <div class="bottom-line"></div>
         <p class="box-label"><span>栏目类别</span><b>只能选择一个分类</b></p>
         <ul class="box-list">
-          <li v-for="category in filterData.categories" :_id="category._id">{{ category.name }}</li>
+          <li :_id="category._id"
+            v-for="category in filterData.categories" 
+            :class="{active: category._id === post.category}"
+            @click="postChangeCategory(category._id)">{{ category.name }}</li>
         </ul>
+        
+        <div class="input-box">
+          <input type="text" placeholder="新增分类" v-model="post.addCategory" spellcheck="false" @keyup.13="postAddCategory">
+          <a @click="postAddCategory" class="{disabled: post.isAddCategory}">{{post.isAddCategory ? '保存中' : '保存'}}</a>
+        </div>
 
         <div class="bottom-line"></div>
-        <p class="box-label"><span>标签云</span><b>最多三个标签</b></p>
+        <p class="box-label"><span>标签云</span><b>重复点击可取消选择</b></p>
         <ul class="box-list">
-          <li v-for="tag in filterData.tags" :_id="tag._id">{{ tag.name }}</li>
+          <li :_id="tag._id"
+            v-for="tag in filterData.tags"
+            :class="{active: ~post.tags.indexOf(tag._id)}"
+            @click="postChangeTags(tag._id)">{{ tag.name }}</li>
         </ul>
+
+        <div class="input-box">
+          <input type="text" placeholder="新增标签" spellcheck="false" v-model="post.addTag" @keyup.13="postAddtag">
+          <a @click="postAddtag" class="{disabled: post.isAddTag}">{{post.isAddTag ? '保存中' : '保存'}}</a>
+        </div>
+
+        <div class="button-box">发布</div>
+        <div class="button-box red" @click="post.isShow=false">取消</div>
       </div>
     </div>
 

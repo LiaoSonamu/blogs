@@ -21,20 +21,26 @@ const fetchOption = {
   credentials: 'include'
 };
 
+const fetchResponse = r => {
+  if(r.ok) return r.json();
+  else throw '请求失败';
+}
+
 // 加载标签，分类数据等筛选数据
 const filterLists = () => {
   fetch('/filter/lists', {...fetchOption})
-    .then(res => res.json())
+    .then(fetchResponse)
     .then(d => {
-      if(d.code === -1) {
-        vueData.filterData.state = -1;
-        vueData.filterData.message = '服务器异常';
-      }else{
-        vueData.filterData.state = 1;
-        vueData.filterData.tags = d.tags;
-        vueData.filterData.categories = d.categories;
-      }
+      if(d.code === -1) throw d.message;
+        
+      vueData.filterData.state = 1;
+      vueData.filterData.tags = d.tags;
+      vueData.filterData.categories = d.categories;
+
       $vm.$nextTick(() => filterScroll = new IScroll('.right-filter', scrollOption));
+    }).catch(e => {
+      vueData.filterData.state = -1;
+      alert('string' === typeof e ? e : '服务器异常');
     });
 }
 
@@ -82,8 +88,16 @@ const showRightBox = {
 
 // 发布文章或者编辑文章相关
 const postArticles = {
-  postChageNature(nature) {
+  postChangeNature(nature) {
     this.post.nature = nature;
+  },
+  postChangeCategory(category) {
+    this.post.category = category;
+  },
+  postChangeTags(tag) {
+    let i = this.post.tags.indexOf(tag);
+    if(~i) this.post.tags.splice(i, 1);
+    else this.post.tags.push(tag);
   },
   postArticleChange() {
     this.post.html = markdownit({
@@ -98,6 +112,46 @@ const postArticles = {
     }).render(this.post.markdown);
 
     $vm.$nextTick(() => postViewScroll.refresh());
+  },
+  postAddtag() {
+    if(!this.post.isAddTag && this.post.addTag.trim()) {
+      this.post.isAddTag = true;
+      fetch('/filter/tag', {
+        method: 'POST',
+        ...fetchOption,
+        body: JSON.stringify({name: this.post.addTag})
+      }).then(fetchResponse)
+      .then(d => {
+        this.post.isAddTag = false;
+        if(d.code === -1) throw d.message;
+        this.filterData.tags.push(d);
+        this.post.addTag = '';
+        this.post.tags.push(d._id);
+      }).catch(e => {
+        this.post.isAddTag = false;
+        alert('string' === typeof e ? e : '服务器异常');
+      });
+    }
+  },
+  postAddCategory(){
+    if(!this.post.isAddCategory && this.post.addCategory) {
+      this.post.isAddCategory = true;
+      fetch('/filter/category', {
+        method: 'POST',
+        ...fetchOption,
+        body: JSON.stringify({name: this.post.addCategory})
+      }).then(fetchResponse)
+      .then(d => {
+        this.post.isAddCategory = false;
+        if(d.code === -1) throw d.message;
+        this.filterData.categories.push(d);
+        this.post.addCategory = '';
+        this.post.category = d._id;
+      }).catch(e => {
+        this.post.isAddCategory = false;
+        alert('string' === typeof e ? e : '服务器异常');
+      });
+    }
   }
 }
 
@@ -134,16 +188,16 @@ const commonMethod = {
           type: 'register',
           email: this.registerData.email
         })
-      }).then(res => res.json())
+      }).then(fetchResponse)
       .then(d => {
-        if(d && d.code === -1) {
-          alert(d.message);
-          this.registerData.time = 0;
-        }else{
-          this.registerData.time = 60;
-          let timmer = setInterval(() => --this.registerData.time <= 0 && clearInterval(timmer), 1000);
-        }
-      }, () => this.registerData.time = 0)
+        if(d.code === -1) throw d.message;
+
+        this.registerData.time = 60;
+        let timmer = setInterval(() => --this.registerData.time <= 0 && clearInterval(timmer), 1000);
+      }).catch(e => {
+        this.registerData.time = 0;
+        alert('string' === typeof e ? e : '服务器异常');
+      });
     }
   },
   // 登录
@@ -160,15 +214,14 @@ const commonMethod = {
       }).then(res => res.json())
       .then(d => {
         this.loginData.state = 0;
-        // 登录成功
-        if(d.code != -1) {
-          this.userinfo = d;
-          this.rightBoxGo('ucenter');
-          this.historyRemove('login', 'register');
-        }else alert(d.message);
-      }, () => {
-        alert('登录失败');
+        if(d.code === -1) throw d.message;
+        
+        this.userinfo = d;
+        this.rightBoxGo('ucenter');
+        this.historyRemove('login', 'register');
+      }).catch(e => {
         this.loginData.state = 0;
+        alert('string' === typeof e ? e : '服务器异常');
       });
     }
   },
