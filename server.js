@@ -43,10 +43,7 @@ app.use('*', (req, res, next) => {
   next();
 });
 
-// 路由配置
-require(`./routes/indexRouter`)(app);
-require(`./routes/commonRouter`)(app);
-require(`./routes/filterRouter`)(app);
+app.use('/', require(`./routers`));
 
 app.use((err, req, res, next) => {
   res.locals.message = err.message;

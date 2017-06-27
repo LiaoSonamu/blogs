@@ -42,7 +42,7 @@
           <a @click="postAddtag" class="{disabled: post.isAddTag}">{{post.isAddTag ? '保存中' : '保存'}}</a>
         </div>
 
-        <div class="button-box">发布</div>
+        <div class="button-box" @click="postAddArticle" :class="{loading: post.isPostArticle}"><i class="fa fa-spinner fa-pulse"></i>发布</div>
         <div class="button-box red" @click="post.isShow=false">取消</div>
       </div>
     </div>

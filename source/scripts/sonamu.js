@@ -28,7 +28,7 @@ const fetchResponse = r => {
 
 // 加载标签，分类数据等筛选数据
 const filterLists = () => {
-  fetch('/filter/lists', {...fetchOption})
+  fetch('/tags-and-categories', {...fetchOption})
     .then(fetchResponse)
     .then(d => {
       if(d.code === -1) throw d.message;
@@ -90,6 +90,7 @@ const showRightBox = {
 const postArticles = {
   postChangeNature(nature) {
     this.post.nature = nature;
+    if(nature === 'original') this.post.link = '';
   },
   postChangeCategory(category) {
     this.post.category = category;
@@ -116,7 +117,7 @@ const postArticles = {
   postAddtag() {
     if(!this.post.isAddTag && this.post.addTag.trim()) {
       this.post.isAddTag = true;
-      fetch('/filter/tag', {
+      fetch('/tag', {
         method: 'POST',
         ...fetchOption,
         body: JSON.stringify({name: this.post.addTag})
@@ -136,7 +137,7 @@ const postArticles = {
   postAddCategory(){
     if(!this.post.isAddCategory && this.post.addCategory) {
       this.post.isAddCategory = true;
-      fetch('/filter/category', {
+      fetch('/category', {
         method: 'POST',
         ...fetchOption,
         body: JSON.stringify({name: this.post.addCategory})
@@ -152,6 +153,42 @@ const postArticles = {
         alert('string' === typeof e ? e : '服务器异常');
       });
     }
+  },
+  postAddArticle(){
+    if(this.post.isPostArticle) return;
+    if(this.post.nature !== 'original' && !this.post.link) return alert('非原创文章必须填写原文链接');
+    if(!this.post.category) return alert('请选择文章分类');
+    if(!this.post.tags.length) return alert('请选择文章标签');
+    if(!this.post.title || this.post.title.length > 30) return alert('文章标题必填且必须小于30个字符');
+    this.post.isPostArticle = true;
+    let article = {
+      title: this.post.title,
+      context: this.post.markdown,
+      type: this.post.nature,
+      category: this.post.category,
+      tags: this.post.tags,
+      link: this.post.link
+    };
+
+    fetch('/article', {
+      method: 'POST',
+      ...fetchOption,
+      body: JSON.stringify({article: article})
+    }).then(fetchResponse)
+    .then(d => {
+      this.post.isPostArticle = false;
+      this.post.isShow = false;
+      this.post.nature = 'original';
+      this.post.link = '';
+      this.post.category = '';
+      this.post.tags.splice(0);
+      this.post.title = '';
+      this.post.markdown = '';
+      this.post.html = '文章预览区域';
+    }).catch(e => {
+      this.post.isPostArticle = false;
+      alert('string' === typeof e ? e : '服务器异常');
+    });
   }
 }
 
@@ -178,20 +215,18 @@ const commonMethod = {
   scrollTop() {
     mainScroll.scrollTo(0, 0);
   },
-  sendRegisterCode(){
+  getRegisterCode(){
     if(!this.registerData.time && this.validateRegisterEmail()) {
       this.registerData.time = 61;
-      fetch('/common/sendCode', {
+      fetch('/registerCode', {
         ...fetchOption,
-        method: 'POST',
+        method: 'GET',
         body: JSON.stringify({
-          type: 'register',
           email: this.registerData.email
         })
       }).then(fetchResponse)
       .then(d => {
         if(d.code === -1) throw d.message;
-
         this.registerData.time = 60;
         let timmer = setInterval(() => --this.registerData.time <= 0 && clearInterval(timmer), 1000);
       }).catch(e => {
@@ -204,7 +239,7 @@ const commonMethod = {
   loginFn(){
     if(!this.loginData.state && this.validateLoginEmail() && this.validateLoginPassword()) {
       this.loginData.state = 1;
-      fetch('/common/login', {
+      fetch('/login', {
         method: 'POST',
         ...fetchOption,
         body: JSON.stringify({
@@ -229,7 +264,7 @@ const commonMethod = {
   registerFn(){
     if(!this.registerData.state && this.validateRegisterEmail() && this.validateRegisterCode() && this.validateRegisterPassword()) {
       this.registerData.state = 1;
-      fetch('/common/register', {
+      fetch('/register', {
         method: 'POST',
         ...fetchOption,
         body: JSON.stringify({
