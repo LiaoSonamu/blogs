@@ -8,5 +8,8 @@ module.exports = {
     if(!userinfo) res.json({code: -1, message: '请登录!'});
     article.author = userinfo._id;
     new ArticleModel(article).save((e, r) => e ? res.json({code: -1, message: '服务器异常'}) : res.json(r));
+  },
+  getDetail(req, res) {
+    // ArticleModel.find
   }
 }

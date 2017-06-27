@@ -1,6 +1,11 @@
 # Server配置 (服务器启动配置)
 httpPort: 80
-mongoUrl: mongodb://localhost:27017/test
+
+mysql:
+  host: '123.207.15.235'
+  user: 'root'
+  password: 'Sonamu14mysqL'
+  database: 'blogs'
 
 mail: 
   service: qq

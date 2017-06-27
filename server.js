@@ -8,14 +8,17 @@ const
     partial = require('express-partials'),
     session = require('express-session'),
     http = require(`http`),
-    mongoose = require(`mongoose`),
     nodemailer = require(`nodemailer`),
-    MongoStore = require('connect-mongo')(session),
+    mysql = require('mysql'),
 
     app = express(),
     config = require(`require-yml`)(`config.yml`);
 
-mongoose.Promise = require('bluebird');
+global.$db = mysql.createPool(config.mysql);
+
+// pool.getConnection(function(err, conn) {
+//   console.log(err, conn);
+// });
 
 app.set('mail', nodemailer.createTransport(config.mail));
 app.set(`views`, path.join(__dirname, `views`));
@@ -26,10 +29,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({
-  store: new MongoStore({
-    interval: 3600000,
-    url: config.mongoUrl
-  }),
   secret: 'sonamu'
 }));
 app.use(favicon(path.join(__dirname, `/favicon.jpg`)));
@@ -53,18 +52,9 @@ app.use((err, req, res, next) => {
   console.log(err);
 });
 
-// 创建MongoDB连接
-mongoose
-  .connect(config.mongoUrl)
-  .connection
-  .on(`connected`, () => {
-    console.log(`Mongodb连接成功！`);
-    // 创建HTTP连接
-    (http
-      .createServer(app)
-      .listen(config.httpPort))
-      .on('error', error => {throw error})
-      .on('listening', () => console.log(`HTTP服务创建成功，监听端口：${config.httpPort}`));
-  })
-  .on(`error`, err => console.log(`Mongodb连接失败：${err}`))
-  .on(`disconnected`, () => console.log(`Mongodb断开连接！`));
+// 创建HTTP连接
+(http
+  .createServer(app)
+  .listen(config.httpPort))
+  .on('error', error => {throw error})
+  .on('listening', () => console.log(`HTTP服务创建成功，监听端口：${config.httpPort}`));
