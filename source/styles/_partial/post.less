@@ -12,7 +12,6 @@
   background: @bg-main;
   transform: translateZ(0);
   padding-left: 300px;
-
   .post-box-info {
     width: 300px;
     height: 100%;
@@ -20,6 +19,9 @@
     left: 0;
     top: 0;
     padding-left: 13px;
+    .bottom-line {
+      margin: 10px 0;
+    }
   }
   .post-box-view, .post-box-edit {
     position: relative;
@@ -43,5 +45,9 @@
   }
   .bottom-line {
     margin: 0;
+  }
+  .post-link {
+    background: @bg-box;
+    width: 100%;
   }
 }

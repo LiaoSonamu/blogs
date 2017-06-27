@@ -75,11 +75,16 @@ const showRightBox = {
   // 打开发布编辑器
   showPost() {
     this.post.isShow = true;
+    this.post.state = 1; //TODO 如果是编辑文章 需在Ajax后设置
+    this.filterData.state !== 1 && filterLists();
   }
 }
 
 // 发布文章或者编辑文章相关
 const postArticles = {
+  postChageNature(nature) {
+    this.post.nature = nature;
+  },
   postArticleChange() {
     this.post.html = markdownit({
       html: true,
@@ -196,7 +201,6 @@ const commonMethod = {
   }
 }
 
-
 /*********************************methods end************************************ */
 
 $vm = new Vue({
@@ -204,14 +208,34 @@ $vm = new Vue({
   data: vueData,
   mounted() {
     mainScroll = new IScroll('.layout_left', scrollOption);
-    postFilterScroll = new IScroll('.post-box-info', scrollOption);
-    postViewScroll = new IScroll('.post-box-view', scrollOption);
   },
   methods: {
     ...showRightBox,
     ...validateFns,
     ...commonMethod,
     ...postArticles
+  },
+  watch: {
+    filterData: {
+      deep: true,
+      handler(v){
+        if(v.state === 1 && this.post.state === 1) 
+          $vm.$nextTick(() => {
+            postFilterScroll = new IScroll('.post-box-info', scrollOption);
+            postViewScroll = new IScroll('.post-box-view', scrollOption);
+          });
+　　　}
+    },
+    post: {
+      deep: true,
+      handler(v){
+        if(v.state === 1 && this.filterData.state === 1) 
+          $vm.$nextTick(() => {
+            postFilterScroll = new IScroll('.post-box-info', scrollOption);
+            postViewScroll = new IScroll('.post-box-view', scrollOption);
+          });
+　　　}
+    }
   }
 });
 

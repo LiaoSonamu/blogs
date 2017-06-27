@@ -1,9 +1,30 @@
 <div class="post-box" :class="{active: post.isShow}">
   
-  <template v-if="post.state === 1">
+  <template v-if="post.state === 1 && filterData.state === 1">
     <div class="post-box-info">
       <div class="scroll_right_inner">
+        <p class="box-label"><span>文章来源</span></p>
 
+        <ul class="box-list">
+          <li :class="{active: post.nature === 'original'}" @click="postChageNature('original')">原创</li>
+          <li :class="{active: post.nature === 'translate'}" @click="postChageNature('translate')">翻译</li>
+          <li :class="{active: post.nature === 'reprint'}" @click="postChageNature('reprint')">转载</li>
+          <li :class="{active: post.nature === 'excerpt'}" @click="postChageNature('excerpt')">节选</li>
+        </ul>
+
+        <input type="text" placeholder="原文地址" class="post-link" v-model="post.link" v-if="post.nature != 'original'">
+
+        <div class="bottom-line"></div>
+        <p class="box-label"><span>栏目类别</span><b>只能选择一个分类</b></p>
+        <ul class="box-list">
+          <li v-for="category in filterData.categories" :_id="category._id">{{ category.name }}</li>
+        </ul>
+
+        <div class="bottom-line"></div>
+        <p class="box-label"><span>标签云</span><b>最多三个标签</b></p>
+        <ul class="box-list">
+          <li v-for="tag in filterData.tags" :_id="tag._id">{{ tag.name }}</li>
+        </ul>
       </div>
     </div>
 
