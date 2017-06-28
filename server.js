@@ -15,12 +15,11 @@ const
     config = require(`require-yml`)(`config.yml`);
 
 global.$db = mysql.createPool(config.mysql);
-
+global.$mail = nodemailer.createTransport(config.mail);
 // pool.getConnection(function(err, conn) {
 //   console.log(err, conn);
 // });
 
-app.set('mail', nodemailer.createTransport(config.mail));
 app.set(`views`, path.join(__dirname, `views`));
 app.set(`view engine`, `ejs`);
 

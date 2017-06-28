@@ -218,12 +218,9 @@ const commonMethod = {
   getRegisterCode(){
     if(!this.registerData.time && this.validateRegisterEmail()) {
       this.registerData.time = 61;
-      fetch('/registerCode', {
+      fetch(`/registerCode?email=${this.registerData.email}`, {
         ...fetchOption,
-        method: 'GET',
-        body: JSON.stringify({
-          email: this.registerData.email
-        })
+        method: 'GET'
       }).then(fetchResponse)
       .then(d => {
         if(d.code === -1) throw d.message;
