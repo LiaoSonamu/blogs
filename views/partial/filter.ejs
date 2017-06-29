@@ -12,13 +12,13 @@
   <div class="bottom-line"></div>
   <p class="box-label"><span>栏目类别</span></p>
   <ul class="box-list">
-    <li v-for="category in filterData.categories" :_id="category._id">{{ category.name }}</li>
+    <li v-for="category in filterData.categories" :id="category.id">{{ category.name }}</li>
   </ul>
 
   <div class="bottom-line"></div>
   <p class="box-label"><span>标签云</span></p>
   <ul class="box-list">
-    <li v-for="tag in filterData.tags" :_id="tag._id">{{ tag.name }}</li>
+    <li v-for="tag in filterData.tags" :id="tag.id">{{ tag.name }}</li>
   </ul>
   
 </template>

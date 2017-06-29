@@ -127,7 +127,7 @@ const postArticles = {
         if(d.code === -1) throw d.message;
         this.filterData.tags.push(d);
         this.post.addTag = '';
-        this.post.tags.push(d._id);
+        this.post.tags.push(d.id);
       }).catch(e => {
         this.post.isAddTag = false;
         alert('string' === typeof e ? e : '服务器异常');
@@ -147,7 +147,7 @@ const postArticles = {
         if(d.code === -1) throw d.message;
         this.filterData.categories.push(d);
         this.post.addCategory = '';
-        this.post.category = d._id;
+        this.post.category = d.id;
       }).catch(e => {
         this.post.isAddCategory = false;
         alert('string' === typeof e ? e : '服务器异常');
