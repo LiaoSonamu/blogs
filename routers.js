@@ -1,7 +1,8 @@
 const 
   router = require(`express`).Router(),
   specialController = require('./controllers/specialController'),
-  tagsAndCategoriesController = require('./controllers/tagsAndCategoriesController');
+  tagsAndCategoriesController = require('./controllers/tagsAndCategoriesController'),
+  articleController = require('./controllers/articleController');
 
 /***************特殊路由，非REST模式****************/
 router.get('/', specialController.index); // 首页
@@ -18,7 +19,7 @@ router.post('/tag', tagsAndCategoriesController.addTag); // 添加标签
 router.post(`/category`, tagsAndCategoriesController.addCategory); // 添加分类
 
 // /***************文章****************/
-// router.post('/article', articleController.addArticle);
+router.post('/article', articleController.addArticle);
 // router.get('/article', articleController.getDetail);
 
 module.exports = router;
