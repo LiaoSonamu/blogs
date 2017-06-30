@@ -7,6 +7,7 @@ const
     bodyParser = require(`body-parser`),
     partial = require('express-partials'),
     session = require('express-session'),
+    RedisStore = require('connect-redis')(session),
     http = require(`http`),
     nodemailer = require(`nodemailer`),
     mysql = require('mysql'),
@@ -16,9 +17,6 @@ const
 
 global.$db = mysql.createPool(config.mysql);
 global.$mail = nodemailer.createTransport(config.mail);
-// pool.getConnection(function(err, conn) {
-//   console.log(err, conn);
-// });
 
 app.set(`views`, path.join(__dirname, `views`));
 app.set(`view engine`, `ejs`);
@@ -28,6 +26,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({
+  store: new RedisStore(config['redis']),
   secret: 'sonamu'
 }));
 app.use(favicon(path.join(__dirname, `/favicon.jpg`)));

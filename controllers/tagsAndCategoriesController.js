@@ -13,6 +13,9 @@ module.exports = {
 
   // 添加分类
   addTag(req, res) {
+    let userinfo = req.session.userinfo;    
+    if(!userinfo) return res.json({code: -1, message: '请重新登录!'});
+    if(userinfo.role === 'reader') return res.json({code: -1, message: '读者没有添加权限'});
     let name = req.body.name;
     $db.query(`INSERT INTO tag (name) VALUES (?)`, [name], (e, r) => {
       if(e) return res.json({code: -1, message: '服务器异常'});
@@ -22,6 +25,9 @@ module.exports = {
 
   // 添加分类
   addCategory(req, res) {
+    let userinfo = req.session.userinfo;
+    if(!userinfo) return res.json({code: -1, message: '请重新登录!'});
+    if(userinfo.role === 'reader') return res.json({code: -1, message: '读者没有添加权限'});
     let name = req.body.name;
     $db.query(`INSERT INTO category (name) VALUES (?)`, [name], (e, r) => {
       if(e) return res.json({code: -1, message: '服务器异常'});

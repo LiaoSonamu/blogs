@@ -2,10 +2,15 @@
 httpPort: 80
 
 mysql:
-  host: '123.207.15.235'
-  user: 'root'
-  password: 'Sonamu14mysqL'
-  database: 'blogs'
+  host: 123.207.15.235
+  user: root
+  password: Sonamu14mysqL
+  database: blogs
+
+redis:
+  host: 123.207.15.235
+  port: 6379
+  db: 0
 
 mail: 
   service: qq
