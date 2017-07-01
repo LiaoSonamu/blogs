@@ -20,6 +20,7 @@ router.post(`/category`, tagsAndCategoriesController.addCategory); // 添加分�
 
 // /***************文章****************/
 router.post('/article', articleController.addArticle);
-// router.get('/article', articleController.getDetail);
+router.get('/article-lists', articleController.getArticleLists);
+router.get('/article/:id', articleController.getDetail);
 
 module.exports = router;

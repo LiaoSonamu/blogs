@@ -1,8 +1,8 @@
 <div class="ucenter-header">
   <img ondragstart="return false;" src="<%= $static.images + $static.avatar %>" :src="'<%= $static.images %>' + userinfo.avatar">
   <div class="user-info">
-    <h6>阿斯蒂芬阿斯蒂芬阿斯蒂芬<span>(管理员)</span></h6>
-    <p>简介：沙发爽肤水啥地方是的是简介：沙发爽肤水啥地方是的是简介：沙发爽肤水啥地方是的是简介：沙发爽肤水啥地方是的是</p>
+    <h6>{{userinfo.nickname}}<span>({{ ({reader: '读者', author: '作者', admin: '管理员'})[userinfo.role] }})</span></h6>
+    <p>简介：{{userinfo.describe || '这家伙很很懒，什么都没留下。'}}</p>
   </div>
 </div>
 
@@ -52,4 +52,4 @@
   </li>
 </ul>
 
-<div class="button-box red" style="margin: 20px 10px 0;">退出登录</div>
+<div class="button-box red" style="margin: 20px 10px 0;" @click="logoutFn">退出登录</div>

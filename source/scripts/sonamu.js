@@ -123,8 +123,8 @@ const postArticles = {
         body: JSON.stringify({name: this.post.addTag})
       }).then(fetchResponse)
       .then(d => {
-        this.post.isAddTag = false;
         if(d.code === -1) throw d.message;
+        this.post.isAddTag = false;
         this.filterData.tags.push(d);
         this.post.addTag = '';
         this.post.tags.push(d.id);
@@ -143,8 +143,8 @@ const postArticles = {
         body: JSON.stringify({name: this.post.addCategory})
       }).then(fetchResponse)
       .then(d => {
-        this.post.isAddCategory = false;
         if(d.code === -1) throw d.message;
+        this.post.isAddCategory = false;
         this.filterData.categories.push(d);
         this.post.addCategory = '';
         this.post.category = d.id;
@@ -176,6 +176,7 @@ const postArticles = {
       body: JSON.stringify({article: article})
     }).then(fetchResponse)
     .then(d => {
+      if(d.code === -1) throw d.message;
       this.post.isPostArticle = false;
       this.post.isShow = false;
       this.post.nature = 'original';
@@ -283,6 +284,17 @@ const commonMethod = {
         this.registerData.state = 0
       });
     }
+  },
+  logoutFn() {
+    fetch('/logout', {
+      method: 'POST',
+      ...fetchOption
+    }).then(res => res.json())
+    .then(d => {
+      this.userinfo = null;
+      this.rightBoxGo('login');
+      this.historyRemove('ucenter');
+    });
   }
 }
 
