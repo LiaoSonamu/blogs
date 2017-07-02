@@ -25,7 +25,24 @@ module.exports = {
   },
   // 获取文章列表
   getArticleLists(req, res) {
+    let pagesize = 20, where = '', values = [];
+    let {page, keywords, nature, tags, categories} = req.query;
 
+    if(nature !== 'all') values.push(nature) && (where += ` AND a.nature=?`);
+    if(!~tags.indexOf(-1)) values.push(`(${tags.join(', ')})`) && (where += ` AND t.tag_id IN ?`);
+    if(!~tags.indexOf(-1)) values.push(`(${categories.join(', ')})`) && (where += ` AND a.category IN ?`);
+    if(keywords.trim()) values.push(`%${keywords}%`) && values.push(`%${keywords}%`) && (where += ` AND a.title LIKE ? OR a.context LIKE ?`);
+    $db.query(`SELECT a.title, a.id, a.type
+      FROM article a
+      LEFT JOIN user u ON a.author=u.id
+      LEFT JOIN category c ON a.category=c.id
+      LEFT JOIN article_tag t ON a.id=t.article_id
+      WHERE state=3${where}
+      GROUP BY a.id
+      LIMIT ${pagesize*page},${pagesize}`, values, (e, r) => {
+        if(e) return res.json({code: -1, message: '服务器异常'});
+        res.json(r);
+      });
   },
   // 获取文章详情内容 根据id
   getDetail(req, res) {

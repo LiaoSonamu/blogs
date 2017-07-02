@@ -213,6 +213,22 @@ article {
     border-radius: 2px;
     font-size: 12px;
     padding: 0 5px;
+    &.original {
+      color: @nature-original;
+      border-color: @nature-original;
+    }
+    &.translate {
+      color: @nature-translate;
+      border-color: @nature-translate;
+    }
+    &.reprint {
+      color: @nature-reprint;
+      border-color: @nature-reprint;
+    }
+    &.excerpt {
+      color: @nature-excerpt;
+      border-color: @nature-excerpt;
+    }
   }
 }
 
@@ -516,6 +532,27 @@ article {
       &:hover {
         background: transparent;
       }
+    }
+  }
+}
+
+.article-lists {
+  li {
+    position: relative;
+    font-weight: normal;
+    padding: 10px 0;
+    h1 {
+      line-height: 20px;
+    }
+    &:after {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 1px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      background: linear-gradient(270deg,transparent,hsla(0,0%,100%,.1) 20%,hsla(0,0%,100%,.1) 80%,transparent);
     }
   }
 }

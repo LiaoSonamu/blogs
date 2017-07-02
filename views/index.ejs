@@ -15,10 +15,9 @@
       searchData: { // 搜索内容
         keywords: '', // 关键字
         nature: 'all', // 文章来源 all(全部) original(原创) translate(翻译) reprint(转载) excerpt(节选) 
-        filter: { // 筛选
-          type: '', // 筛选类型 tag/categories
-          id: '' // 筛选ID (标签/分类ID)
-        }
+        page: 0, // 第几页 (0开始)
+        tags: [-1],
+        categories: [-1]
       },
       post: {
         state: 0,
@@ -36,8 +35,8 @@
         html: '文章预览区域',
         isPostArticle: false
       },
-
       listsData: {
+        state: 0,
         title: '文章列表',
         noctrls: true, // 不包含返回，关闭按钮
         articles: [], // 文章列表

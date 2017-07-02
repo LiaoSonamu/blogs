@@ -2,6 +2,7 @@ let hljs = require('highlight.js');
 
 let $vm = null, 
 mainScroll = null, postFilterScroll = null, postViewScroll = null,
+listsScroll = null,
 filterScroll = null;
 
 // 自定义滚动条配置
@@ -26,6 +27,14 @@ const fetchResponse = r => {
   else throw '请求失败';
 }
 
+const fetchParams = d => {
+  let r = [];
+  for(let i in d) {
+    r.push(`${i}=${d[i]}`);
+  }
+  return r.join('&');
+}
+
 // 加载标签，分类数据等筛选数据
 const filterLists = () => {
   fetch('/tags-and-categories', {...fetchOption})
@@ -43,7 +52,21 @@ const filterLists = () => {
       alert('string' === typeof e ? e : '服务器异常');
     });
 }
-
+// 获取文章列表 是否清空列表
+const getArticleLists = (isEmpty, option={}) => {
+  fetch(`/article-lists?${fetchParams(vueData.searchData)}`, {...fetchOption})
+  .then(fetchResponse)
+  .then(d => {
+    if(d.code === -1) throw '服务器异常';
+    vueData.listsData.state = 1;
+    isEmpty && vueData.listsData.articles.splice(0);
+    vueData.listsData.articles.push(...d);
+    $vm.$nextTick(() => listsScroll.refresh());
+  }).catch(e => {
+    vueData.listsData.state = 1;
+    alert('string' === typeof e ? e : '服务器异常');
+  });
+}
 /*********************************methods start************************************ */
 
 // 打开某个right
@@ -304,13 +327,25 @@ $vm = new Vue({
   el: '#app',
   data: vueData,
   mounted() {
-    mainScroll = new IScroll('.layout_left', scrollOption);
+    // mainScroll = new IScroll('.layout_left', scrollOption);
+    listsScroll = new IScroll('.right-lists', scrollOption);
+    getArticleLists(true);
   },
   methods: {
     ...showRightBox,
     ...validateFns,
     ...commonMethod,
     ...postArticles
+  },
+  filters: {
+    nature(v){
+      return ({
+        original: '原创',
+        translate: '翻译',
+        reprint: '转载',
+        excerpt: '节选'
+      })[v];
+    }
   },
   watch: {
     filterData: {

@@ -12,15 +12,19 @@
   <div class="bottom-line"></div>
   <p class="box-label"><span>栏目类别</span></p>
   <ul class="box-list">
-    <li v-for="category in filterData.categories" :id="category.id">{{ category.name }}</li>
+    <li class="active">不限</li>
+    <li v-for="category in filterData.categories">{{ category.name }}</li>
   </ul>
 
   <div class="bottom-line"></div>
   <p class="box-label"><span>标签云</span></p>
   <ul class="box-list">
-    <li v-for="tag in filterData.tags" :id="tag.id">{{ tag.name }}</li>
+    <li class="active">不限</li>
+    <li v-for="tag in filterData.tags">{{ tag.name }}</li>
   </ul>
   
+  <div class="bottom-line"></div>
+  <div class="button-box" style="margin: 20px 10px 0;" >确定筛选</div>
 </template>
 <template v-else-if="filterData.state === 0">
   <%- partial('partial/loading') %>

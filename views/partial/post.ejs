@@ -17,9 +17,8 @@
         <div class="bottom-line"></div>
         <p class="box-label"><span>栏目类别</span><b>只能选择一个分类</b></p>
         <ul class="box-list">
-          <li :id="category.id"
+          <li :class="{active: category.id === post.category}"
             v-for="category in filterData.categories" 
-            :class="{active: category.id === post.category}"
             @click="postChangeCategory(category.id)">{{ category.name }}</li>
         </ul>
         
@@ -31,9 +30,8 @@
         <div class="bottom-line"></div>
         <p class="box-label"><span>标签云</span><b>重复点击可取消选择</b></p>
         <ul class="box-list">
-          <li :id="tag.id"
+          <li :class="{active: ~post.tags.indexOf(tag.id)}"
             v-for="tag in filterData.tags"
-            :class="{active: ~post.tags.indexOf(tag.id)}"
             @click="postChangeTags(tag.id)">{{ tag.name }}</li>
         </ul>
 
