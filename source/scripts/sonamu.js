@@ -323,12 +323,23 @@ const commonMethod = {
 
 /*********************************methods end************************************ */
 
+// 图片load
+const addImageLoadedEvent = () => {
+  let imgs = document.querySelectorAll('.article-context img');
+  for(let i = 0; i < imgs.length; i++) {
+    imgs[i].addEventListener('load', function(){
+      mainScroll.refresh();
+    }, false);
+  }
+}
+
 $vm = new Vue({
   el: '#app',
   data: vueData,
   mounted() {
     mainScroll = new IScroll('.layout_left', scrollOption);
     listsScroll = new IScroll('.right-lists', scrollOption);
+    addImageLoadedEvent();
     getArticleLists(true);
   },
   methods: {

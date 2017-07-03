@@ -27,7 +27,7 @@
   </header>
 
 
-  <article v-html="$options.filters.markdown(article.detail.context)"></article>
+  <article class="article-context" v-html="$options.filters.markdown(article.detail.context)"></article>
 </div>
 <template v-else-if="article.state === 0">
   <%- partial('partial/loading') %>
