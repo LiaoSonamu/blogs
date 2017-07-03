@@ -7,19 +7,21 @@ module.exports = {
   
   // 首页页面加载
   index(req, res) {
-    $db.query(`UPDATE article a SET a.read=a.read+1 LIMIT 1`, (e, r) => {
+    $db.query(`UPDATE article a SET a.read=a.read+1 ORDER BY a.create_time DESC LIMIT 1`, (e, r) => {
       if(e) res.render('index', {article: null, code: -1});
       $db.query(`SELECT a.id, a.title, a.context, a.create_time, a.type, a.link, a.read, a.category categoryid, c.name category, u.id userid, u.nickname,
-          (SELECT GROUP_CONCAT('{"id":', tag.id, ',"name":"', tag.name, '"},') FROM article_tag LEFT JOIN tag ON tag.id=article_tag.tag_id WHERE article_tag.article_id=a.id) tags
+          (SELECT GROUP_CONCAT('{"id":', tag.id, ',"name":"', tag.name, '"}') FROM article_tag LEFT JOIN tag ON tag.id=article_tag.tag_id WHERE article_tag.article_id=a.id) tags
         FROM article a
         LEFT JOIN user u ON a.author=u.id
         LEFT JOIN category c ON a.category=c.id
         WHERE a.state=3
+        ORDER BY a.create_time DESC
         LIMIT 1`, (e, r) => {
           if(e) return res.render('index', {article: null, code: -1});
           if(!r.length) return res.render('index', {article: null, code: -1});
           r = r[0];
-          r.tags = JSON.parse(`[${r.tags.slice(0, r.tags.length - 1)}]`);
+          console.log(r);
+          r.tags = JSON.parse(`[${r.tags}]`);
           res.render('index', {article: r, code: 1});
         }
       );

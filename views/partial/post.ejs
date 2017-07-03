@@ -12,7 +12,7 @@
           <li :class="{active: post.nature === 'excerpt'}" @click="postChangeNature('excerpt')">节选</li>
         </ul>
 
-        <input type="text" placeholder="原文地址" class="post-link" v-model="post.link" v-if="post.nature != 'original'">
+        <input type="text" placeholder="原文地址" spellcheck="false" class="post-link" v-model="post.link" v-if="post.nature != 'original'">
 
         <div class="bottom-line"></div>
         <p class="box-label"><span>栏目类别</span><b>只能选择一个分类</b></p>
@@ -23,7 +23,7 @@
         </ul>
         
         <div class="input-box">
-          <input type="text" placeholder="新增分类" v-model="post.addCategory" spellcheck="false" @keyup.13="postAddCategory">
+          <input type="text" placeholder="新增分类" spellcheck="false" v-model="post.addCategory" @keyup.13="postAddCategory">
           <a @click="postAddCategory" class="{disabled: post.isAddCategory}">{{post.isAddCategory ? '保存中' : '保存'}}</a>
         </div>
 

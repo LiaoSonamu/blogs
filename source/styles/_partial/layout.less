@@ -1,3 +1,4 @@
+#seo {display: none}
 #app {
   width: 100%;
   height: 100%;
@@ -145,6 +146,13 @@ article {
   ul:not(:last-child), ol:not(:last-child) {
     margin-bottom: 20px;
   }
+  a {
+    margin: 0 5px;
+    text-decoration: underline;
+    &:hover {
+      color: @color-highlight;
+    }
+  }
   blockquote {
     font-family: Georgia,"Times New Roman",Times,Kai,"Kaiti SC",KaiTi,BiauKai,FontAwesome,serif;
     background: rgba(0, 0, 0, 0.2);
@@ -177,6 +185,19 @@ article {
     display: block;
     margin: auto;
     max-width: 100%;
+  }
+  table {
+    border-collapse: collapse;
+    margin-bottom: 20px; 
+    width: 100%;
+    th {
+      line-height: 40px;
+      border-bottom: 2px solid #eaeaea;
+    }
+    td {
+      border-bottom: 1px solid #6e6e6e;
+      line-height: 30px;
+    }
   }
 }
 
