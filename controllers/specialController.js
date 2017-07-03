@@ -1,18 +1,4 @@
-const 
-  hljs = require('highlight.js'),
-  crypto = require('crypto'),
-
-  md = require('markdown-it')({
-    html: true,
-    highlight: function (str, lang) {
-      if (lang && hljs.getLanguage(lang)) 
-        try {
-          return hljs.highlight(lang, str).value;
-        } catch (__) {}
-      return ''; // use external default escaping
-    }
-  });
-
+const crypto = require('crypto');
 
 // 生成验证码
 const createCode = () => '000000'.replace(/0/g, v => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[Math.random()*26|0]);
@@ -21,7 +7,24 @@ module.exports = {
   
   // 首页页面加载
   index(req, res) {
-    res.render('index',  {article: md.render('# Hellow word')});
+    $db.query(`UPDATE article a SET a.read=a.read+1 LIMIT 1`, (e, r) => {
+      if(e) res.render('index', {article: null, code: code});
+      $db.query(`SELECT a.id, a.title, a.context, a.create_time, a.type, a.link, a.read, a.category categoryid, c.name category, u.id userid, u.nickname,
+          (SELECT GROUP_CONCAT('{"id":', tag.id, ',"name":"', tag.name, '"},') FROM article_tag LEFT JOIN tag ON tag.id=article_tag.tag_id WHERE article_tag.article_id=a.id) tags
+        FROM article a
+        LEFT JOIN user u ON a.author=u.id
+        LEFT JOIN category c ON a.category=c.id
+        WHERE a.state=3
+        LIMIT 1`, (e, r) => {
+          let code = 1;
+          if(e) code = -1;
+          if(!r.length) code = -1;
+          r = r[0];
+          r.tags = JSON.parse(`[${r.tags.slice(0, r.tags.length - 1)}]`);
+          res.render('index', {article: code === 1 ? r : null, code: code});
+        }
+      );
+    });
   },
 
   // 登录

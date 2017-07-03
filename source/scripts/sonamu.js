@@ -35,6 +35,17 @@ const fetchParams = d => {
   return r.join('&');
 }
 
+const toMarkdown = (str) => markdownit({
+  html: true,
+  highlight: (str, lang) => {
+    if (lang && hljs.getLanguage(lang))
+      try {
+        return hljs.highlight(lang, str).value;
+      } catch (__) {};
+    return ''; // use external default escaping
+  }
+}).render(str);
+
 // 加载标签，分类数据等筛选数据
 const filterLists = () => {
   fetch('/tags-and-categories', {...fetchOption})
@@ -53,7 +64,7 @@ const filterLists = () => {
     });
 }
 // 获取文章列表 是否清空列表
-const getArticleLists = (isEmpty, option={}) => {
+const getArticleLists = (isEmpty) => {
   fetch(`/article-lists?${fetchParams(vueData.searchData)}`, {...fetchOption})
   .then(fetchResponse)
   .then(d => {
@@ -124,17 +135,6 @@ const postArticles = {
     else this.post.tags.push(tag);
   },
   postArticleChange() {
-    this.post.html = markdownit({
-      html: true,
-      highlight: function (str, lang) {
-        if (lang && hljs.getLanguage(lang))
-          try {
-            return hljs.highlight(lang, str).value;
-          } catch (__) {};
-        return ''; // use external default escaping
-      }
-    }).render(this.post.markdown);
-
     $vm.$nextTick(() => postViewScroll.refresh());
   },
   postAddtag() {
@@ -327,7 +327,7 @@ $vm = new Vue({
   el: '#app',
   data: vueData,
   mounted() {
-    // mainScroll = new IScroll('.layout_left', scrollOption);
+    mainScroll = new IScroll('.layout_left', scrollOption);
     listsScroll = new IScroll('.right-lists', scrollOption);
     getArticleLists(true);
   },
@@ -345,27 +345,45 @@ $vm = new Vue({
         reprint: '转载',
         excerpt: '节选'
       })[v];
+    },
+    nry(v){
+      let date = new Date(v * 1000);
+      return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`.replace(/\b\d\b/g, '0$&');
+    },
+    markdown(v){
+      return markdownit({
+        html: true,
+        highlight: (str, lang) => {
+          if (lang && hljs.getLanguage(lang))
+            try {
+              return hljs.highlight(lang, str).value;
+            } catch (__) {};
+          return ''; // use external default escaping
+        }
+      }).render(v);
     }
   },
   watch: {
     filterData: {
       deep: true,
       handler(v){
-        if(v.state === 1 && this.post.state === 1) 
+        if(v.state === 1 && this.post.state === 1 && !postFilterScroll) {
           $vm.$nextTick(() => {
             postFilterScroll = new IScroll('.post-box-info', scrollOption);
             postViewScroll = new IScroll('.post-box-view', scrollOption);
           });
+        }
 　　　}
     },
     post: {
       deep: true,
       handler(v){
-        if(v.state === 1 && this.filterData.state === 1) 
+        if(v.state === 1 && this.filterData.state === 1 && !postFilterScroll) {
           $vm.$nextTick(() => {
             postFilterScroll = new IScroll('.post-box-info', scrollOption);
             postViewScroll = new IScroll('.post-box-view', scrollOption);
           });
+        }
 　　　}
     }
   }

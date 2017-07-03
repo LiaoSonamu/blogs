@@ -12,6 +12,10 @@
       historyBox: ['lists'], // 右侧历史页面，默认打开filter
       showBoxData: {title: '文章列表', noctrls: true},
       userinfo: <%- JSON.stringify($userinfo || null) %>,
+      article: {
+        state: <%= code %>,
+        detail: <%- JSON.stringify(article) %>
+      },
       searchData: { // 搜索内容
         keywords: '', // 关键字
         nature: 'all', // 文章来源 all(全部) original(原创) translate(翻译) reprint(转载) excerpt(节选) 
@@ -32,7 +36,6 @@
         isAddTag: false,
         title: '',
         markdown: '',
-        html: '文章预览区域',
         isPostArticle: false
       },
       listsData: {
@@ -83,7 +86,7 @@
       </div>
 
       <!--搜索列表-->
-      <div class="scroll_right right-has-title right-lists" :class="{active: historyBox[historyBox.length - 1] === 'lists'}">
+      <div class="scroll_right right-has-title right-lists" :style="historyBox[historyBox.length - 1] === 'lists' ? 'display: block' : 'display: none'">
         <div class="scroll_right_inner">
           <template v-if="historyBox[historyBox.length - 1] === 'lists'">
             <%- partial('partial/lists') %>
@@ -92,7 +95,7 @@
       </div>
 
       <!--标签分类-->
-      <div class="scroll_right right-has-title right-filter" :class="{active: historyBox[historyBox.length - 1] === 'filter'}">
+      <div class="scroll_right right-has-title right-filter" :style="historyBox[historyBox.length - 1] === 'filter' ? 'display: block' : 'display: none'">
         <div class="scroll_right_inner">
           <template v-if="historyBox[historyBox.length - 1] === 'filter'">
             <%- partial('partial/filter') %>
@@ -101,7 +104,7 @@
       </div>
 
       <!--个人中心-->
-      <div class="scroll_right right-has-title right-ucenter" :class="{active: historyBox[historyBox.length - 1] === 'ucenter'}">
+      <div class="scroll_right right-has-title right-ucenter" :style="historyBox[historyBox.length - 1] === 'ucenter' ? 'display: block' : 'display: none'">
         <div class="scroll_right_inner no-padding">
           <template v-if="historyBox[historyBox.length - 1] === 'ucenter'">
             <%- partial('partial/ucenter') %>
@@ -110,7 +113,7 @@
       </div>
 
       <!--登录-->
-      <div class="scroll_right right-has-title right-login" :class="{active: historyBox[historyBox.length - 1] === 'login'}">
+      <div class="scroll_right right-has-title right-login" :style="historyBox[historyBox.length - 1] === 'login' ? 'display: block' : 'display: none'">
         <div class="scroll_right_inner">
           <template v-if="historyBox[historyBox.length - 1] === 'login'">
             <%- partial('partial/login') %>
@@ -119,7 +122,7 @@
       </div>
 
       <!--注册-->
-      <div class="scroll_right right-has-title right-register" :class="{active: historyBox[historyBox.length - 1] === 'register'}">
+      <div class="scroll_right right-has-title right-register" :style="historyBox[historyBox.length - 1] === 'register' ? 'display: block' : 'display: none'">
         <div class="scroll_right_inner">
           <template v-if="historyBox[historyBox.length - 1] === 'register'">
             <%- partial('partial/register') %>

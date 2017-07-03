@@ -46,7 +46,7 @@
     </div>
 
     <div class="post-box-view">
-      <article v-html="post.html"></article>
+      <article v-html="$options.filters.markdown(post.markdown)" placeholder="文章预览区域"></article>
     </div>
 
     <div class="post-box-edit">
