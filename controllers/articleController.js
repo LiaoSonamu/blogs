@@ -39,6 +39,7 @@ module.exports = {
       LEFT JOIN article_tag t ON a.id=t.article_id
       WHERE state=3${where}
       GROUP BY a.id
+      ORDER BY a.create_time DESC
       LIMIT ${pagesize*page},${pagesize}`, values, (e, r) => {
         if(e) return res.json({code: -1, message: '服务器异常'});
         res.json(r);
@@ -47,5 +48,21 @@ module.exports = {
   // 获取文章详情内容 根据id
   getDetail(req, res) {
     let article_id = req.params.id;
+    $db.query(`UPDATE article a SET a.read=a.read+1 WHERE id=?`, [article_id], (e, r) => {
+      if(e) return res.json({code: -1, message: '服务器异常'});
+      $db.query(`SELECT a.id, a.title, a.context, a.create_time, a.type, a.link, a.read, a.category categoryid, c.name category, u.id userid, u.nickname, 
+          (SELECT GROUP_CONCAT('{"id":', tag.id, ',"name":"', tag.name, '"}') FROM article_tag LEFT JOIN tag ON tag.id=article_tag.tag_id WHERE article_tag.article_id=a.id) tags
+        FROM article a
+        LEFT JOIN user u ON a.author=u.id
+        LEFT JOIN category c ON a.category=c.id
+        WHERE a.state=3 AND a.id=?`, [article_id], (e, r) => {
+          if(e) return res.json({code: -1, message: '服务器异常'});
+          if(!r.length) return res.json({code: -1, message: '文章被删除或者不存在'});
+          r = r[0];
+          r.tags = JSON.parse(`[${r.tags}]`);
+          res.json(r);
+        }
+      );
+    });
   }
 }

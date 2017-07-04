@@ -4,9 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Sonamu - <%= article.title %></title>
-  <meta name="keywords" content="sonamu,前端,博客,<%= article.category %><%= article.tags.reduce((p,c) => p + ',' + c.name, '') %>">
-  <meta name="description" content="<%= article.context.slice(0, 150) %>">
+  <title>Sonamu <%= article && '-' + article.title %></title>
+  <%if(article){%>
+    <meta name="keywords" content="sonamu,前端,博客,<%= article.category %><%= article.tags.reduce((p,c) => p + ',' + c.name, '') %>">
+    <meta name="description" content="<%= article.context.slice(0, 150) %>">
+  <%}%>
   <link rel="stylesheet" href="<%= $static.styles %>sonamu.css">
   
   <script>
@@ -67,11 +69,15 @@
   </script>
 </head>
 <body>
-  <div id="seo">
-    <h1><%= article.title %></h1>
-    <article><%= article.context %></article>
-    <a href="/post/1111" class="next"></a>
-  </div>
+  <%if(article){%>
+    <div id="seo">
+      <h1><%= article.title %></h1>
+      <article><%= article.context %></article>
+      <%if(article.next){%>
+        <a href="/post/<%=article.next%>" class="next"></a>
+      <%}%>
+    </div>
+  <%}%>
   <div id="app">
     <div class="layout_left">
 

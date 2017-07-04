@@ -1,4 +1,4 @@
-<div style="display:none" :style="article.state === 1 ? 'display: block' : 'display: none'">
+<div style="display:none" :style="article.state === 1 ? 'display: block' : 'display: none'" v-if="article.state === 1">
   <header>
     <div class="article-header">
       <h1 class="article-title">
@@ -21,8 +21,8 @@
       <li><i class="fa fa-calendar"></i><span>发布日期：</span><a href="javascript:;" class="text">{{ article.detail.create_time | nry }}</a></li>
       <li v-if="article.detail.type !== 'original'"><i class="fa fa-link"></i><a :href="article.detail.link" target="_blank">原文链接</a></li>
       <!--管理员和作者自己可以删除/编辑-->
-      <li v-if="userinfo.role === 'admin' || userinfo.id === article.detail.userid" style="color: #6795de"><i class="fa fa-edit"></i><a href="javascript:;">编辑</a></li>
-      <li v-if="userinfo.role === 'admin' || userinfo.id === article.detail.userid" style="color: #b1361e"><i class="fa fa-trash"></i><a href="javascript:;">删除</a></li>
+      <li v-if="userinfo && (userinfo.role === 'admin' || userinfo.id === article.detail.userid)" style="color: #6795de"><i class="fa fa-edit"></i><a href="javascript:;">编辑</a></li>
+      <li v-if="userinfo && (userinfo.role === 'admin' || userinfo.id === article.detail.userid)" style="color: #b1361e"><i class="fa fa-trash"></i><a href="javascript:;">删除</a></li>
     </ul>
   </header>
 

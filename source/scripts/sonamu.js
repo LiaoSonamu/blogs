@@ -318,6 +318,22 @@ const commonMethod = {
       this.rightBoxGo('login');
       this.historyRemove('ucenter');
     });
+  },
+  getArticleDetailByID(id){
+    this.article.state = 0;
+    fetch(`/article/${id}`, {
+      method: 'GET',
+      ...fetchOption
+    }).then(r => r.json())
+    .then(d => {
+      if(d.code === -1) throw d.message;
+      this.article.state = 1;
+      this.article.detail = d;
+      $vm.$nextTick(() => {mainScroll.refresh();addImageLoadedEvent();});
+    }).catch(e => {
+      this.article.state = 1;
+      alert('string' === typeof e ? e : '服务器异常');
+    });
   }
 }
 
@@ -339,8 +355,13 @@ $vm = new Vue({
   mounted() {
     mainScroll = new IScroll('.layout_left', scrollOption);
     listsScroll = new IScroll('.right-lists', scrollOption);
+    // 文章内容图片加载成功后刷新滚动条
     addImageLoadedEvent();
+    //  获取文章列表
     getArticleLists(true);
+    // 如果有文章ID，带文章ID做文章抓取
+    let article_id = (location.hash || '').slice(1);
+    if(/^\d+$/.test(article_id)) this.getArticleDetailByID(article_id);
   },
   methods: {
     ...showRightBox,
