@@ -321,6 +321,7 @@ const commonMethod = {
   },
   getArticleDetailByID(id){
     this.article.state = 0;
+    $vm && $vm.$nextTick(() => mainScroll.refresh());
     fetch(`/article/${id}`, {
       method: 'GET',
       ...fetchOption
@@ -332,6 +333,7 @@ const commonMethod = {
       $vm.$nextTick(() => {mainScroll.refresh();addImageLoadedEvent();});
     }).catch(e => {
       this.article.state = 1;
+      $vm && $vm.$nextTick(() => mainScroll.refresh());
       alert('string' === typeof e ? e : '服务器异常');
     });
   }
